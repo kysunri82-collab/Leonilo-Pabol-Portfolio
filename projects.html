@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leonilo Pabol | Projects</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="brand">LEONILO PABOL</a>
+  <div class="navbar">
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="skills.html">Skills</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="resume.html">Resume</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="Toggle dark mode">🌙 Dark</button>
+    <button class="hamburger" aria-label="Open menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap">
+    <h1 class="section-title">Projects</h1>
+    <p class="section-sub">A few things I've built. Click a thumbnail for a closer look, or filter by type.</p>
+
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="web">Web</button>
+      <button class="filter-btn" data-filter="school">School</button>
+      <button class="filter-btn" data-filter="personal">Personal</button>
+    </div>
+
+    <div class="projects-grid">
+
+      <div class="project-card" data-category="school"
+           data-title="Personal Portfolio Website"
+           data-full-desc="A responsive 6-page portfolio (this site!) built with HTML, CSS, and vanilla JavaScript, including dark mode, form validation, and project filtering.">
+        <div class="project-thumb">Add image:<br>images/project-portfolio.jpg</div>
+        <div class="project-body">
+          <h3>Personal Portfolio Website</h3>
+          <p>A responsive 6-page portfolio built from scratch with HTML, CSS, and vanilla JavaScript.</p>
+          <div class="tag-row">
+            <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" data-category="web"
+           data-title="Facebook Ad Video Project"
+           data-full-desc="Edited and posted a short video advertisement for an animation course assignment, including caption copy written to boost engagement.">
+        <div class="project-thumb">Add image:<br>images/project-fbad.jpg</div>
+        <div class="project-body">
+          <h3>Course Video Advertisement</h3>
+          <p>Edited and published a short promotional video with an engagement-focused caption.</p>
+          <div class="tag-row">
+            <span class="tag">Video Editing</span><span class="tag">Copywriting</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" data-category="school"
+           data-title="Project Three"
+           data-full-desc="Replace this with a real project: what it does, the problem it solves, and your role in building it.">
+        <div class="project-thumb">Add image:<br>images/project-three.jpg</div>
+        <div class="project-body">
+          <h3>Project Title Three</h3>
+          <p>Short description — swap in one of your real school or freelance projects here.</p>
+          <div class="tag-row">
+            <span class="tag">HTML</span><span class="tag">CSS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" data-category="personal"
+           data-title="Project Four"
+           data-full-desc="Replace this with a real project: what it does, the problem it solves, and your role in building it.">
+        <div class="project-thumb">Add image:<br>images/project-four.jpg</div>
+        <div class="project-body">
+          <h3>Project Title Four</h3>
+          <p>Short description — swap in a personal project, even a small one, here.</p>
+          <div class="tag-row">
+            <span class="tag">JavaScript</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box">
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="modal-img" id="modal-img">Project preview</div>
+    <h3 id="modal-title" style="margin:16px 0 6px;"></h3>
+    <p id="modal-desc" style="color:var(--text-soft);"></p>
+  </div>
+</div>
+
+<footer>
+  <p>Thanks for stopping by.</p>
+  <p>Leonilo Pabol's Portfolio • <span id="year"></span></p>
+  <a href="#top">BACK TO TOP ↑</a>
+</footer>
+
+<button id="scroll-top-btn" aria-label="Scroll to top">↑</button>
+<script src="js/script.js"></script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
