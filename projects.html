@@ -3,115 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leonilo Pabol | Projects</title>
+<title>Projects | Leonilo Pabol</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<header>
-  <a href="index.html" class="brand">LEONILO PABOL</a>
-  <div class="navbar">
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="skills.html">Skills</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="resume.html">Resume</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-    <button class="theme-toggle" aria-label="Toggle dark mode">🌙 Dark</button>
-    <button class="hamburger" aria-label="Open menu" aria-expanded="false">☰</button>
-  </div>
-</header>
-
-<section class="section">
-  <div class="wrap">
-    <h1 class="section-title">Projects</h1>
-    <p class="section-sub">Selected web, school, and personal projects. Open a project preview for details, or filter by type.</p>
-
-    <div class="filter-row">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="web">Web</button>
-      <button class="filter-btn" data-filter="school">School</button>
-      <button class="filter-btn" data-filter="personal">Personal</button>
-    </div>
-
-    <div class="projects-grid">
-
-      <div class="project-card" data-category="school"
-           data-title="Personal Portfolio Website"
-           data-full-desc="A responsive 6-page portfolio (this site!) built with HTML, CSS, and vanilla JavaScript, including dark mode, form validation, and project filtering.">
-        <div class="project-thumb">Personal Portfolio Website</div>
-        <div class="project-body">
-          <h3>Personal Portfolio Website</h3>
-          <p>A responsive 6-page portfolio built from scratch with HTML, CSS, and vanilla JavaScript.</p>
-          <div class="tag-row">
-            <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card" data-category="web"
-           data-title="Short-Form Motion Study"
-           data-full-desc="A short-form video project exploring animation, pacing, and clear visual storytelling for social media.">
-        <div class="project-thumb">Short-Form Motion Study</div>
-        <div class="project-body">
-          <h3>Short-Form Motion Study</h3>
-          <p>A social video concept focused on animation, pacing, and visual storytelling.</p>
-          <div class="tag-row">
-            <span class="tag">Video Editing</span><span class="tag">Copywriting</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card" data-category="school"
-           data-title="Campus Resource Hub"
-           data-full-desc="A responsive front-end concept that organizes useful campus links and student resources in one easy-to-navigate place.">
-        <div class="project-thumb">Campus Resource Hub</div>
-        <div class="project-body">
-          <h3>Campus Resource Hub</h3>
-          <p>A simple student-focused hub for organizing campus links and essential resources.</p>
-          <div class="tag-row">
-            <span class="tag">HTML</span><span class="tag">CSS</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card" data-category="personal"
-           data-title="Aura Brew Premium Coffee Video"
-           data-full-desc="An animated Facebook video promoting Aura Brew premium coffee.">
-        <div class="project-thumb">Aura Brew<br>Premium Coffee Video</div>
-        <div class="project-body">
-          <h3>Aura Brew Premium Coffee Video</h3>
-          <p>An animated video concept created to introduce Aura Brew premium coffee.</p>
-          <div class="tag-row">
-            <span class="tag">Animation</span><span class="tag">Video</span>
-          </div>
-          <a href="https://www.facebook.com/share/v/1HwaF3r3qq/" target="_blank" rel="noopener">Watch the video on Facebook ↗</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal-box">
-    <button class="modal-close" aria-label="Close">&times;</button>
-    <div class="modal-img" id="modal-img">Project details</div>
-    <h3 id="modal-title" style="margin:16px 0 6px;"></h3>
-    <p id="modal-desc" style="color:var(--text-soft);"></p>
-  </div>
+<div class="layout">
+<aside class="side">
+<a class="logo" href="index.html">Leonilo.</a>
+<button class="menu-btn" aria-label="Menu">☰</button>
+<button id="theme" aria-label="Toggle theme"></button>
+<nav id="nav">
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<a href="skills.html">Skills</a>
+<a href="projects.html">Projects</a>
+<a href="resume.html">Resume</a>
+<a href="contact.html">Contact</a>
+</nav>
+</aside>
+<main>
+<h1 class="title">Projects</h1>
+<p class="sub">Filter by type.</p>
+<div class="tabs">
+<button class="filter show" data-f="all">All</button>
+<button class="filter" data-f="web">Web</button>
+<button class="filter" data-f="school">School</button>
+<button class="filter" data-f="personal">Personal</button>
 </div>
-
-<footer>
-  <p>Thanks for stopping by.</p>
-  <p>Leonilo Pabol's Portfolio • <span id="year"></span></p>
-  <a href="#top">BACK TO TOP ↑</a>
-</footer>
-
-<button id="scroll-top-btn" aria-label="Scroll to top">↑</button>
+<div class="grid">
+<div class="card" data-type="web">
+<img src="images/project1.jpg" alt="Portfolio website">
+<div><h3>Portfolio Website</h3><p>My 6-page responsive personal website.</p>
+<span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span></div>
+</div>
+<div class="card" data-type="school">
+<img src="images/project2.jpg" alt="Video advertisement">
+<div><h3>Course Video Ad</h3><p>A short promo video posted on Facebook for my animation class.</p>
+<span class="tag">Video Editing</span><span class="tag">Facebook</span></div>
+</div>
+<div class="card" data-type="school">
+<img src="images/project3.jpg" alt="Project three">
+<div><h3>Project Three</h3><p>Describe another project here.</p>
+<span class="tag">Add tech</span></div>
+</div>
+<div class="card" data-type="personal">
+<img src="images/project4.jpg" alt="Project four">
+<div><h3>Project Four</h3><p>Describe another project here.</p>
+<span class="tag">Add tech</span></div>
+</div>
+</div>
+<footer>© 2026 Leonilo S. Pabol</footer>
+</main>
+</div>
+<button id="top" aria-label="Back to top">↑</button>
 <script src="js/script.js"></script>
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

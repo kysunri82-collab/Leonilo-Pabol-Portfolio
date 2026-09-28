@@ -3,66 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leonilo Pabol | Resume</title>
+<title>Resume | Leonilo Pabol</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<header>
-  <a href="index.html" class="brand">LEONILO PABOL</a>
-  <div class="navbar">
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="skills.html">Skills</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="resume.html">Resume</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-    <button class="theme-toggle" aria-label="Toggle dark mode">🌙 Dark</button>
-    <button class="hamburger" aria-label="Open menu" aria-expanded="false">☰</button>
-  </div>
-</header>
-
-<section class="section">
-  <div class="wrap">
-    <h1 class="section-title">Resume / Experience</h1>
-    <p class="section-sub">Education, activities, and training — edit the dates and details to match your own.</p>
-
-    <ol class="timeline">
-      <li>
-        <span class="when">2023 — Present</span>
-        <h3>BS Information Technology</h3>
-        <p>Studying web development, databases, and systems fundamentals. Currently in ITS 300 - Section B.</p>
-      </li>
-      <li>
-        <span class="when">2026</span>
-        <h3>Animation Course — Video Ad Project</h3>
-        <p>Produced and posted a short Facebook video advertisement as part of a course activity, including caption writing aimed at boosting engagement.</p>
-      </li>
-      <li>
-        <span class="when">Add year</span>
-        <h3>Training / Certification (edit me)</h3>
-        <p>Add a workshop, seminar, or certificate you've completed — e.g. a web development bootcamp or online course.</p>
-      </li>
-      <li>
-        <span class="when">Add year</span>
-        <h3>Activity / Organization (edit me)</h3>
-        <p>Add a school organization, club, or volunteer activity you've been part of.</p>
-      </li>
-    </ol>
-
-  </div>
-</section>
-
-<footer>
-  <p>Thanks for stopping by.</p>
-  <p>Leonilo Pabol's Portfolio • <span id="year"></span></p>
-  <a href="#top">BACK TO TOP ↑</a>
-</footer>
-
-<button id="scroll-top-btn" aria-label="Scroll to top">↑</button>
+<div class="layout">
+<aside class="side">
+<a class="logo" href="index.html">Leonilo.</a>
+<button class="menu-btn" aria-label="Menu">☰</button>
+<button id="theme" aria-label="Toggle theme"></button>
+<nav id="nav">
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<a href="skills.html">Skills</a>
+<a href="projects.html">Projects</a>
+<a href="resume.html">Resume</a>
+<a href="contact.html">Contact</a>
+</nav>
+</aside>
+<main>
+<h1 class="title">Resume</h1>
+<p class="sub">Click a section to open it.</p>
+<div class="acc open">
+<button class="acc-head">Education</button>
+<div class="acc-body"><p>BS Information Technology - add school name and years.</p></div>
+</div>
+<div class="acc">
+<button class="acc-head">Activities</button>
+<div class="acc-body"><p>Animation course video advertisement (2026). Add clubs or school activities here.</p></div>
+</div>
+<div class="acc">
+<button class="acc-head">Training &amp; Certifications</button>
+<div class="acc-body"><p>Add seminars, workshops, or certificates here.</p></div>
+</div>
+<div class="acc">
+<button class="acc-head">Experience</button>
+<div class="acc-body"><p>Add any work, volunteer, or freelance experience here.</p></div>
+</div>
+<footer>© 2026 Leonilo S. Pabol</footer>
+</main>
+</div>
+<button id="top" aria-label="Back to top">↑</button>
 <script src="js/script.js"></script>
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

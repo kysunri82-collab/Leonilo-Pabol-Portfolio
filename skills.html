@@ -3,94 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leonilo Pabol | Skills</title>
+<title>Skills | Leonilo Pabol</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<header>
-  <a href="index.html" class="brand">LEONILO PABOL</a>
-  <div class="navbar">
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="skills.html">Skills</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="resume.html">Resume</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-    <button class="theme-toggle" aria-label="Toggle dark mode">🌙 Dark</button>
-    <button class="hamburger" aria-label="Open menu" aria-expanded="false">☰</button>
-  </div>
-</header>
-
-<section class="section">
-  <div class="wrap">
-    <h1 class="section-title">Skills</h1>
-    <p class="section-sub">A snapshot of my web development, design, and problem-solving skills.</p>
-
-    <div class="skills-grid">
-
-      <div class="skill-card">
-        <h3>HTML5</h3>
-        <p>Semantic, accessible page structure.</p>
-        <div class="skill-bar"><div class="skill-bar-fill" data-level="90"></div></div>
-      </div>
-
-      <div class="skill-card">
-        <h3>CSS3</h3>
-        <p>Flexbox, Grid, responsive layouts, custom themes.</p>
-        <div class="skill-bar"><div class="skill-bar-fill" data-level="85"></div></div>
-      </div>
-
-      <div class="skill-card">
-        <h3>JavaScript</h3>
-        <p>DOM manipulation, form validation, interactivity.</p>
-        <div class="skill-bar"><div class="skill-bar-fill" data-level="75"></div></div>
-      </div>
-
-      <div class="skill-card">
-        <h3>Responsive Design</h3>
-        <p>Mobile-first layouts across devices.</p>
-        <div class="skill-bar"><div class="skill-bar-fill" data-level="80"></div></div>
-      </div>
-
-      <div class="skill-card">
-        <h3>Git & GitHub</h3>
-        <p>Version control and hosting with GitHub Pages.</p>
-        <div class="skill-bar"><div class="skill-bar-fill" data-level="70"></div></div>
-      </div>
-
-      <div class="skill-card">
-        <h3>UI / Visual Design</h3>
-        <p>Consistent color, spacing, and typography systems.</p>
-        <div class="skill-bar"><div class="skill-bar-fill" data-level="72"></div></div>
-      </div>
-
-      <div class="skill-card">
-        <h3>Problem Solving</h3>
-        <p>Breaking down a feature into small, buildable steps.</p>
-        <div class="skill-bar"><div class="skill-bar-fill" data-level="88"></div></div>
-      </div>
-
-      <div class="skill-card">
-        <h3>Communication</h3>
-        <p>Explaining technical work clearly to others.</p>
-        <div class="skill-bar"><div class="skill-bar-fill" data-level="80"></div></div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<footer>
-  <p>Thanks for stopping by.</p>
-  <p>Leonilo Pabol's Portfolio • <span id="year"></span></p>
-  <a href="#top">BACK TO TOP ↑</a>
-</footer>
-
-<button id="scroll-top-btn" aria-label="Scroll to top">↑</button>
+<div class="layout">
+<aside class="side">
+<a class="logo" href="index.html">Leonilo.</a>
+<button class="menu-btn" aria-label="Menu">☰</button>
+<button id="theme" aria-label="Toggle theme"></button>
+<nav id="nav">
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<a href="skills.html">Skills</a>
+<a href="projects.html">Projects</a>
+<a href="resume.html">Resume</a>
+<a href="contact.html">Contact</a>
+</nav>
+</aside>
+<main>
+<h1 class="title">Skills</h1>
+<p class="sub">More filled dots means more confident.</p>
+<div class="skill-grid">
+<div class="skill-box">
+<h3>Technical</h3>
+<ul>
+<li>HTML <b>●●●●○</b></li>
+<li>CSS <b>●●●●○</b></li>
+<li>JavaScript <b>●●●○○</b></li>
+<li>Git &amp; GitHub <b>●●●○○</b></li>
+<li>Responsive Design <b>●●●●○</b></li>
+</ul>
+</div>
+<div class="skill-box">
+<h3>Personal</h3>
+<ul>
+<li>Problem Solving <b>●●●●○</b></li>
+<li>Communication <b>●●●●○</b></li>
+<li>Creativity <b>●●●●●</b></li>
+</ul>
+</div>
+</div>
+<footer>© 2026 Leonilo S. Pabol</footer>
+</main>
+</div>
+<button id="top" aria-label="Back to top">↑</button>
 <script src="js/script.js"></script>
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
