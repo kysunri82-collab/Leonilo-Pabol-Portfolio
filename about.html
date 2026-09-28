@@ -3,60 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About | Leonilo Pabol</title>
+<title>Leonilo Pabol | About</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="layout">
-<aside class="side">
-<a class="logo" href="index.html">Leonilo.</a>
-<button class="menu-btn" aria-label="Menu">☰</button>
-<button id="theme" aria-label="Toggle theme"></button>
-<nav id="nav">
-<a href="index.html">Home</a>
-<a href="about.html">About</a>
-<a href="skills.html">Skills</a>
-<a href="projects.html">Projects</a>
-<a href="resume.html">Resume</a>
-<a href="contact.html">Contact</a>
-</nav>
-</aside>
-<main>
-<h1 class="title">About Me</h1>
-<p class="sub">Click a tab to learn more about me.</p>
-<div class="tabs">
-<button class="tab-btn show" data-tab="bg">Background</button>
-<button class="tab-btn" data-tab="edu">Education</button>
-<button class="tab-btn" data-tab="goals">Goals</button>
-<button class="tab-btn" data-tab="fun">Interests</button>
-</div>
-<div id="bg" class="tab-panel show">
-<p>I'm Leonilo S. Pabol, an IT student who enjoys turning ideas into working websites.</p>
-<p>Outside of coding, music, books and the outdoors keep me balanced.</p>
-</div>
-<div id="edu" class="tab-panel">
-<p>Information Technology student, ITS 300 - Section B.</p>
-<p>School: add your school name here.</p>
-</div>
-<div id="goals" class="tab-panel">
-<p>Grow as a front-end web developer and build projects that help people connect.</p>
-</div>
-<div id="fun" class="tab-panel">
-<p>Singing and playing the keyboard.</p>
-<p>Reading books that give me new ideas.</p>
-<p>Beach walks and quiet places.</p>
-<p>Pickleball with friends.</p>
-</div>
-<section class="facts">
-<h2>Fun Facts</h2>
-<div><img src="images/koukl-book-pic.jpg" alt="Favorite book"><p>Favorite Book</p></div>
-<div><img src="images/atw.jpg" alt="On repeat"><p>On Repeat</p></div>
-<div><img src="images/coffee.jpg" alt="Fuel of choice"><p>Fuel of Choice</p></div>
+
+<header>
+  <a href="index.html" class="brand">LEONILO PABOL</a>
+  <div class="navbar">
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="skills.html">Skills</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="resume.html">Resume</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="theme-toggle" aria-label="Toggle dark mode">🌙 Dark</button>
+    <button class="hamburger" aria-label="Open menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap">
+    <h1 class="section-title">About Me</h1>
+    <p class="section-sub">Background, education, and what I'm working toward.</p>
+
+    <div class="about-grid">
+      <div class="col">
+        <h3>Background</h3>
+        <p>I'm Leonilo S. Pabol, an ITS 300 student who likes turning ideas into working websites. I enjoy the mix of logic and design that web development requires — figuring out how something should work, and making it look good while doing it.</p>
+        <p>Outside of coding, I spend my time on music, reading, and getting outdoors, which I think keeps me more patient and creative when I'm solving problems on screen.</p>
+      </div>
+      <div class="col">
+        <h3>Education & Goals</h3>
+        <ul class="info-list">
+          <li><span class="label">Program</span><span>BS Information Technology</span></li>
+          <li><span class="label">Section</span><span>ITS 300 - B</span></li>
+          <li><span class="label">Focus</span><span>Front-end web development</span></li>
+          <li><span class="label">Goal</span><span>Build a strong portfolio and land a front-end/web dev role</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </section>
-<footer>© 2026 Leonilo S. Pabol</footer>
-</main>
-</div>
-<button id="top" aria-label="Back to top">↑</button>
+
+<section class="interests" style="padding:0 6% 80px;">
+  <div class="wrap" style="padding:0; width:100%;">
+    <div class="mother-box">
+      <h3>My Hobbies</h3>
+      <p class="hobby">Singing and playing the keyboard are a big part of my free time. Music is one of my ways to relax, have fun, and express what I feel.</p>
+      <p class="hobby">Reading lets me slow down and learn something new. I like books that give me new ideas and make me think about things differently.</p>
+      <p class="hobby">The beach, long walks, and quiet places are my kind of escape. Spending time in nature helps me clear my head and just enjoy some peace.</p>
+      <p class="hobby">Pickleball is one of the activities I've been getting into lately. It keeps me active and gives me a chance to have fun with friends.</p>
+    </div>
+  </div>
+</section>
+
+<section class="funfacts">
+  <div class="wrap" style="padding:0;">
+    <h2>Fun Facts</h2>
+    <div class="fact-grid">
+      <div class="fact-card">
+        <div class="fact-img">Add image:<br>images/koukl-book-pic.jpg</div>
+        <p>Favorite Book</p>
+      </div>
+      <div class="fact-card">
+        <div class="fact-img">Add image:<br>images/atw.jpg</div>
+        <p>On Repeat</p>
+      </div>
+      <div class="fact-card">
+        <div class="fact-img">Add image:<br>images/coffee.jpg</div>
+        <p>Fuel of Choice</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Thanks for stopping by.</p>
+  <p>Leonilo Pabol's Portfolio • <span id="year"></span></p>
+  <a href="#top">BACK TO TOP ↑</a>
+</footer>
+
+<button id="scroll-top-btn" aria-label="Scroll to top">↑</button>
 <script src="js/script.js"></script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

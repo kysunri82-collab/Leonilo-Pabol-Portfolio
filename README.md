@@ -31,10 +31,10 @@ Drop these files into the `images/` folder (any name is fine — just update
 the `src` in the HTML to match):
 - `leonilo.jpg` — your profile photo (Home page)
 - `koukl-book-pic.jpg`, `atw.jpg`, `coffee.jpg` — About page fun facts
-- Project cards use text previews and do not require project photos.
+- `project-portfolio.jpg`, `project-fbad.jpg`, `project-three.jpg`, `project-four.jpg` — Projects page
 
-Profile and About page image slots show a placeholder when an image file is
-missing; project cards use text-only previews.
+Until you add real images, each spot shows a placeholder box so nothing
+looks broken.
 
 ## JavaScript features
 1. Mobile navigation (hamburger menu)
@@ -43,7 +43,7 @@ missing; project cards use text-only previews.
 4. Scroll-to-top button
 5. Active nav link highlighting
 6. Project filtering (Projects page)
-7. Project details modal (Projects page)
+7. Project image modal (Projects page)
 8. Animated skill bars (Skills page)
 
 ## Editing your content
