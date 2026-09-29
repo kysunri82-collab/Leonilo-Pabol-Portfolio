@@ -10,8 +10,6 @@
      4. Scroll-to-top button
      5. Active navigation link highlighting
      6. Project filtering (Projects page)
-     7. Project image modal (Projects page)
-     8. Animated skill bars (Skills page)
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -21,8 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
   initActiveNavLink();
   initContactForm();
   initProjectFilter();
-  initProjectModal();
-  initSkillBars();
 });
 
 /* ---------------------------------------------------------
@@ -164,7 +160,7 @@ function initContactForm() {
     statusBox.classList.remove("show", "success", "error");
 
     if (isValid) {
-      statusBox.textContent = "Thanks, " + nameField.value.trim() + "! Your message looks good. (Connect this form to a real backend or a service like Formspree to actually send it.)";
+      statusBox.textContent = "Form validated. Message not sent.";
       statusBox.classList.add("show", "success");
       form.reset();
     } else {
@@ -212,59 +208,3 @@ function initProjectFilter() {
   });
 }
 
-/* ---------------------------------------------------------
-   7. PROJECT IMAGE MODAL (Projects page)
-   Clicking a project thumbnail opens a larger view in a modal
-   overlay; closing works via the × button, overlay click, or Esc.
---------------------------------------------------------- */
-function initProjectModal() {
-  const overlay = document.getElementById("modal-overlay");
-  const modalImg = document.getElementById("modal-img");
-  const modalTitle = document.getElementById("modal-title");
-  const modalDesc = document.getElementById("modal-desc");
-  const closeBtn = document.querySelector(".modal-close");
-  const thumbs = document.querySelectorAll(".project-thumb");
-  if (!overlay || !thumbs.length) return;
-
-  thumbs.forEach(function (thumb) {
-    thumb.addEventListener("click", function () {
-      const card = thumb.closest(".project-card");
-      modalTitle.textContent = card.getAttribute("data-title") || "";
-      modalDesc.textContent = card.getAttribute("data-full-desc") || "";
-      modalImg.textContent = card.getAttribute("data-title") || "Project preview";
-      overlay.classList.add("open");
-    });
-  });
-
-  function closeModal() { overlay.classList.remove("open"); }
-
-  closeBtn && closeBtn.addEventListener("click", closeModal);
-  overlay.addEventListener("click", function (e) {
-    if (e.target === overlay) closeModal();
-  });
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") closeModal();
-  });
-}
-
-/* ---------------------------------------------------------
-   8. ANIMATED SKILL BARS (Skills page)
-   Uses IntersectionObserver so bars animate to their target
-   width only once they scroll into view.
---------------------------------------------------------- */
-function initSkillBars() {
-  const bars = document.querySelectorAll(".skill-bar-fill");
-  if (!bars.length) return;
-
-  const observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        const target = entry.target.getAttribute("data-level") || "0";
-        entry.target.style.width = target + "%";
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.4 });
-
-  bars.forEach(function (bar) { observer.observe(bar); });
-}

@@ -27,13 +27,14 @@
 <section class="section">
   <div class="wrap">
     <h1 class="section-title">Projects</h1>
-    <p class="section-sub">A few things I've built. Click a thumbnail for a closer look, or filter by type.</p>
+    <p class="section-sub">Selected work and sample concepts. Browse by type; no project photos needed.</p>
 
     <div class="filter-row">
       <button class="filter-btn active" data-filter="all">All</button>
       <button class="filter-btn" data-filter="web">Web</button>
       <button class="filter-btn" data-filter="school">School</button>
       <button class="filter-btn" data-filter="personal">Personal</button>
+      <button class="filter-btn" data-filter="sample">Samples</button>
     </div>
 
     <div class="projects-grid">
@@ -41,7 +42,7 @@
       <div class="project-card" data-category="school"
            data-title="Personal Portfolio Website"
            data-full-desc="A responsive 6-page portfolio (this site!) built with HTML, CSS, and vanilla JavaScript, including dark mode, form validation, and project filtering.">
-        <div class="project-thumb">Add image:<br>images/project-portfolio.jpg</div>
+        <div class="project-kind">Web development · School</div>
         <div class="project-body">
           <h3>Personal Portfolio Website</h3>
           <p>A responsive 6-page portfolio built from scratch with HTML, CSS, and vanilla JavaScript.</p>
@@ -54,7 +55,7 @@
       <div class="project-card" data-category="web"
            data-title="Facebook Ad Video Project"
            data-full-desc="Edited and posted a short video advertisement for an animation course assignment, including caption copy written to boost engagement.">
-        <div class="project-thumb">Add image:<br>images/project-fbad.jpg</div>
+        <div class="project-kind">Video editing · School</div>
         <div class="project-body">
           <h3>Course Video Advertisement</h3>
           <p>Edited and published a short promotional video with an engagement-focused caption.</p>
@@ -64,28 +65,28 @@
         </div>
       </div>
 
-      <div class="project-card" data-category="school"
-           data-title="Project Three"
-           data-full-desc="Replace this with a real project: what it does, the problem it solves, and your role in building it.">
-        <div class="project-thumb">Add image:<br>images/project-three.jpg</div>
+      <div class="project-card" data-category="sample"
+           data-title="Neighborhood Cafe Landing Page"
+           data-full-desc="A sample concept for a neighborhood cafe, with a responsive menu, opening hours, location details, and a clear contact action.">
+        <div class="project-kind">Web design</div>
         <div class="project-body">
-          <h3>Project Title Three</h3>
-          <p>Short description — swap in one of your real school or freelance projects here.</p>
+          <h3>Neighborhood Cafe Landing Page</h3>
+          <p>A sample responsive homepage concept featuring a menu, opening hours, location, and contact details.</p>
           <div class="tag-row">
-            <span class="tag">HTML</span><span class="tag">CSS</span>
+            <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">Responsive design</span>
           </div>
         </div>
       </div>
 
-      <div class="project-card" data-category="personal"
-           data-title="Project Four"
-           data-full-desc="Replace this with a real project: what it does, the problem it solves, and your role in building it.">
-        <div class="project-thumb">Add image:<br>images/project-four.jpg</div>
+      <div class="project-card" data-category="sample"
+           data-title="Study Session Planner"
+           data-full-desc="A sample study planner concept for organizing assignments into focused sessions, with task status and due dates.">
+        <div class="project-kind">Interface concept</div>
         <div class="project-body">
-          <h3>Project Title Four</h3>
-          <p>Short description — swap in a personal project, even a small one, here.</p>
+          <h3>Study Session Planner</h3>
+          <p>A sample planner interface concept for organizing assignments, due dates, and focused study sessions.</p>
           <div class="tag-row">
-            <span class="tag">JavaScript</span>
+            <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
           </div>
         </div>
       </div>
@@ -93,15 +94,6 @@
     </div>
   </div>
 </section>
-
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal-box">
-    <button class="modal-close" aria-label="Close">&times;</button>
-    <div class="modal-img" id="modal-img">Project preview</div>
-    <h3 id="modal-title" style="margin:16px 0 6px;"></h3>
-    <p id="modal-desc" style="color:var(--text-soft);"></p>
-  </div>
-</div>
 
 <footer>
   <p>Thanks for stopping by.</p>
