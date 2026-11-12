@@ -1,4 +1,5 @@
 <?php
+
 session_set_cookie_params([
     'httponly' => true,
     'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
@@ -15,45 +16,71 @@ $csrfToken = generateCsrfToken();
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-if (!validateCsrfToken($_POST["csrf_token"] ?? null)) {
-    $error = "Invalid form submission. Please try again.";
-} else {
 
-    $username = trim($_POST["username"] ?? "");
-    $password = $_POST["password"] ?? "";
+    if (!validateCsrfToken($_POST["csrf_token"] ?? null)) {
 
-    $sql = "SELECT * FROM admins
-            WHERE username = :username
-            OR email = :email
-            LIMIT 1";
-
-    $stmt = $pdo->prepare($sql);
-
-    $stmt->execute([
-        ":username" => $username,
-        ":email" => $username
-
-
-        
-    ]);
-
-    $admin = $stmt->fetch();
-
-    if ($admin && password_verify($password, $admin["password"])) {
-
-        session_regenerate_id(true);
-
-        $_SESSION["admin_id"] = $admin["id"];
-        $_SESSION["admin_username"] = $admin["username"];
-
-        header("Location: dashboard.php");
-        exit;
+        $error = "Invalid form submission. Please try again.";
 
     } else {
-        $error = "Invalid username or password.";
+
+        $username = trim($_POST["username"] ?? "");
+        $password = $_POST["password"] ?? "";
+
+        if ($username === "" || $password === "") {
+
+            $error = "Invalid username or password.";
+
+        } else {
+
+            $sql = "SELECT * FROM admins
+                    WHERE username = :username
+                    OR email = :email
+                    LIMIT 1";
+
+            $stmt = $pdo->prepare($sql);
+
+            $stmt->execute([
+                ":username" => $username,
+                ":email" => $username
+            ]);
+
+            $admin = $stmt->fetch();
+
+            // Use the admin ID so username and email share one limit
+            $loginIdentifier = $admin
+                ? "admin:" . $admin["id"]
+                : $username;
+
+            if (isLoginLocked($pdo, $loginIdentifier)) {
+
+                $error = "Too many failed attempts. Please try again in 15 minutes.";
+
+            } elseif ($admin && password_verify($password, $admin["password"])) {
+
+                clearLoginAttempts($pdo, $loginIdentifier);
+
+                session_regenerate_id(true);
+
+                $_SESSION["admin_id"] = $admin["id"];
+                $_SESSION["admin_username"] = $admin["username"];
+
+                header("Location: dashboard.php");
+                exit;
+
+            } else {
+
+                recordFailedLogin($pdo, $loginIdentifier);
+
+                if (isLoginLocked($pdo, $loginIdentifier)) {
+                    $error = "Too many failed attempts. Please try again in 15 minutes.";
+                } else {
+                    $error = "Invalid username or password.";
+                }
+            }
+        }
     }
 }
-}
+
 ?>
 
 
