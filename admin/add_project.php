@@ -15,7 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Get form values
     $title = trim($_POST["title"] ?? "");
     $description = trim($_POST["description"] ?? "");
+    $category = $_POST["category"] ?? "school";
     $technologies = trim($_POST["technologies"] ?? "");
+
     $project_image = trim($_POST["project_image"] ?? "");
     $project_url = trim($_POST["project_url"] ?? "");
 
@@ -35,23 +37,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // Insert project into database
-    $stmt = $pdo->prepare("
-        INSERT INTO projects (
-            title,
-            description,
-            technologies,
-            project_image,
-            project_url
-        ) VALUES (?, ?, ?, ?, ?)
-    ");
+$stmt = $pdo->prepare("
+    INSERT INTO projects (
+        title,
+        description,
+        category,
+        technologies,
+        project_image,
+        project_url
+    ) VALUES (?, ?, ?, ?, ?, ?)
+");
 
-    $stmt->execute([
-        $title,
-        $description,
-        $technologies,
-        $project_image,
-        $project_url
-    ]);
+$stmt->execute([
+    $title,
+    $description,
+    $category,
+    $technologies,
+    $project_image,
+    $project_url
+]);
 
     header("Location: projects.php?added=1");
     exit;
@@ -77,6 +81,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <label>Project Title</label><br>
         <input type="text" name="title" required>
         <br><br>
+        <label>Project Category</label><br>
+<select name="category" required>
+    <option value="web">Web</option>
+    <option value="school" selected>School</option>
+    <option value="personal">Personal</option>
+    <option value="sample">Sample</option>
+</select>
+<br><br>
 
         <label>Description</label><br>
         <textarea name="description" required></textarea>

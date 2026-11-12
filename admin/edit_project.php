@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $title = trim($_POST["title"] ?? "");
     $description = trim($_POST["description"] ?? "");
+    $category = $_POST["category"] ?? "school";
     $technologies = trim($_POST["technologies"] ?? "");
     $project_image = trim($_POST["project_image"] ?? "");
     $project_url = trim($_POST["project_url"] ?? "");
@@ -48,24 +49,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     $stmt = $pdo->prepare("
-        UPDATE projects SET
-            title = ?,
-            description = ?,
-            technologies = ?,
-            project_image = ?,
-            project_url = ?
-        WHERE id = ?
-    ");
+    UPDATE projects SET
+        title = ?,
+        description = ?,
+        category = ?,
+        technologies = ?,
+        project_image = ?,
+        project_url = ?
+    WHERE id = ?
+");
 
-    $stmt->execute([
-        $title,
-        $description,
-        $technologies,
-        $project_image,
-        $project_url,
-        $id
-    ]);
-
+$stmt->execute([
+    $title,
+    $description,
+    $category,
+    $technologies,
+    $project_image,
+    $project_url,
+    $id
+]);
     header("Location: projects.php?updated=1");
     exit;
 }
@@ -100,6 +102,14 @@ if (!$project) {
         <label>Description</label><br>
         <textarea name="description" required><?= htmlspecialchars($project['description'], ENT_QUOTES, 'UTF-8') ?></textarea>
         <br><br>
+        <label>Project Category</label><br>
+<select name="category" required>
+    <option value="web" <?= $project['category'] === 'web' ? 'selected' : '' ?>>Web</option>
+    <option value="school" <?= $project['category'] === 'school' ? 'selected' : '' ?>>School</option>
+    <option value="personal" <?= $project['category'] === 'personal' ? 'selected' : '' ?>>Personal</option>
+    <option value="sample" <?= $project['category'] === 'sample' ? 'selected' : '' ?>>Sample</option>
+</select>
+<br><br>
 
         <label>Technologies Used</label><br>
         <input type="text" name="technologies"

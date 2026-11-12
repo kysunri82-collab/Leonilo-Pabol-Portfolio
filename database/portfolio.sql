@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 12, 2026 at 06:07 PM
+-- Generation Time: Nov 12, 2026 at 07:34 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -48,6 +48,41 @@ CREATE TABLE `login_attempts` (
   `locked_until` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `profile`
+--
+
+CREATE TABLE `profile` (
+  `id` int(11) NOT NULL,
+  `full_name` varchar(100) NOT NULL,
+  `tagline` varchar(150) NOT NULL,
+  `introduction` text NOT NULL,
+  `profile_image` varchar(255) DEFAULT NULL,
+  `facebook_url` varchar(255) DEFAULT NULL,
+  `youtube_url` varchar(255) DEFAULT NULL,
+  `instagram_url` varchar(255) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `projects`
+--
+
+CREATE TABLE `projects` (
+  `id` int(11) NOT NULL,
+  `title` varchar(150) NOT NULL,
+  `description` text NOT NULL,
+  `category` varchar(50) NOT NULL DEFAULT 'school',
+  `technologies` varchar(255) DEFAULT NULL,
+  `project_image` varchar(255) DEFAULT NULL,
+  `project_url` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -67,6 +102,18 @@ ALTER TABLE `login_attempts`
   ADD UNIQUE KEY `uq_login_identifier_hash` (`identifier_hash`);
 
 --
+-- Indexes for table `profile`
+--
+ALTER TABLE `profile`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `projects`
+--
+ALTER TABLE `projects`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -81,6 +128,18 @@ ALTER TABLE `admins`
 --
 ALTER TABLE `login_attempts`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `profile`
+--
+ALTER TABLE `profile`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `projects`
+--
+ALTER TABLE `projects`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

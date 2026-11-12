@@ -49,11 +49,14 @@ $projects = $stmt->fetchAll();
 
         <?php foreach ($projects as $project): ?>
 
-            <div class="project-card" data-category="school"
+            <div class="project-card"
+     data-category="<?= htmlspecialchars($project['category'], ENT_QUOTES, 'UTF-8') ?>"
                  data-title="<?= htmlspecialchars($project['title'], ENT_QUOTES, 'UTF-8') ?>"
                  data-full-desc="<?= htmlspecialchars($project['description'], ENT_QUOTES, 'UTF-8') ?>">
 
-                <div class="project-kind">School Project</div>
+                <div class="project-kind">
+    <?= htmlspecialchars(ucfirst($project['category']), ENT_QUOTES, 'UTF-8') ?> Project
+</div>
 
                 <div class="project-body">
 
