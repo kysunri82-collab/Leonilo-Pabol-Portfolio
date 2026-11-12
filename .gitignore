@@ -1,0 +1,8 @@
+# Composer dependencies
+/vendor/
+
+# Private email and database credentials
+.env
+
+# Temporary files
+*.log
