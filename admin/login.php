@@ -6,19 +6,16 @@ session_set_cookie_params([
 ]);
 
 session_start();
-if (empty($_SESSION["csrf_token"])) {
-    $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
-}
 
+require_once __DIR__ . '/../includes/security.php';
 require_once __DIR__ . '/../includes/db.php';
+
+$csrfToken = generateCsrfToken();
 
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  if (
-    !isset($_POST["csrf_token"]) ||
-    !hash_equals($_SESSION["csrf_token"], $_POST["csrf_token"])
-) {
+if (!validateCsrfToken($_POST["csrf_token"] ?? null)) {
     $error = "Invalid form submission. Please try again.";
 } else {
 
@@ -98,8 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <input
     type="hidden"
     name="csrf_token"
-    value="<?= htmlspecialchars($_SESSION["csrf_token"], ENT_QUOTES, 'UTF-8') ?>"
->
+    value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
     </form>
 
     <?php if ($error !== ""): ?>
