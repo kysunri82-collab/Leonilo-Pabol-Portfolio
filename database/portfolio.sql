@@ -100,6 +100,24 @@ CREATE TABLE `skills` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `education`
+--
+
+CREATE TABLE `education` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `school` varchar(200) NOT NULL,
+  `degree` varchar(200) NOT NULL,
+  `start_year` varchar(20) DEFAULT NULL,
+  `end_year` varchar(20) DEFAULT NULL,
+  `description` text,
+  `display_order` int NOT NULL DEFAULT 0,
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
