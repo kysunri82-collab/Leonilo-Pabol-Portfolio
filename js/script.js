@@ -165,7 +165,7 @@ function initScrollTopButton() {
 function initActiveNavLink() {
   const links = document.querySelectorAll(".nav-links a");
   let currentPage = window.location.pathname.split("/").pop();
-  if (currentPage === "") currentPage = "index.html";
+  if (currentPage === "") currentPage = "index.php";
 
   links.forEach(function (link) {
     const linkPage = link.getAttribute("href");
