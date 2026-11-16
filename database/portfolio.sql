@@ -118,6 +118,41 @@ CREATE TABLE `education` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `experience`
+--
+
+CREATE TABLE `experience` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `job_title` varchar(200) NOT NULL,
+  `organization` varchar(200) NOT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `description` text,
+  `display_order` int NOT NULL DEFAULT 0,
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `achievements`
+--
+
+CREATE TABLE `achievements` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) NOT NULL,
+  `organization` varchar(200) DEFAULT NULL,
+  `achievement_date` date DEFAULT NULL,
+  `description` text,
+  `display_order` int NOT NULL DEFAULT 0,
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
