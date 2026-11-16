@@ -1,14 +1,7 @@
 <?php
 
-session_set_cookie_params([
-    'httponly' => true,
-    'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
-    'samesite' => 'Lax'
-]);
-
-session_start();
-
 require_once __DIR__ . '/../includes/security.php';
+startSecureSession();
 require_once __DIR__ . '/../includes/db.php';
 
 $csrfToken = generateCsrfToken();
@@ -63,6 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 $_SESSION["admin_id"] = $admin["id"];
                 $_SESSION["admin_username"] = $admin["username"];
+                $_SESSION["admin_last_activity"] = time();
 
                 header("Location: dashboard.php");
                 exit;

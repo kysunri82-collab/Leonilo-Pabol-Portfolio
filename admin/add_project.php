@@ -34,11 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Validate project URL
     if ($project_url !== "") {
-        if (
-            filter_var($project_url, FILTER_VALIDATE_URL) === false ||
-            parse_url($project_url, PHP_URL_SCHEME) !== "https"
-        ) {
-            die("Please enter a valid HTTPS project URL.");
+        if (!isSafeHttpUrl($project_url)) {
+            die("Please enter a valid HTTP or HTTPS project URL.");
         }
     }
 
@@ -130,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <input type="text" name="project_image">
         <br><br>
 
-        <label>Upload Project Image (JPG, JPEG, PNG, or WEBP; maximum 5 MB)</label><br>
+        <label>Upload Project Image (JPG, JPEG, PNG, or WEBP; maximum 5 MB, 6000 x 6000 pixels, and 20 megapixels)</label><br>
         <input type="file" name="project_image_upload" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
         <br><br>
 

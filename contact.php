@@ -1,9 +1,6 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 require_once __DIR__ . '/includes/security.php';
+startSecureSession();
 require_once __DIR__ . '/includes/site_settings.php';
 
 try {
@@ -79,19 +76,42 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header("Location: contact.php?sent=1");
             exit;
         } else {
-            try {
-                $stmt = $pdo->prepare(
-                    "INSERT INTO contact_messages (name, email, subject, message)
-                     VALUES (?, ?, ?, ?)"
-                );
-                $stmt->execute([$name, $email, $subject, $message]);
-            } catch (Throwable $error) {
-                $formError = "Unable to send your message right now. Please try again later.";
+            $now = time();
+            $recentSubmissions = $_SESSION["contact_submission_times"] ?? [];
+
+            if (!is_array($recentSubmissions)) {
+                $recentSubmissions = [];
             }
 
-            if ($formError === "") {
-                header("Location: contact.php?sent=1");
-                exit;
+            $recentSubmissions = array_values(array_filter(
+                $recentSubmissions,
+                static fn($submittedAt) => is_int($submittedAt) && $submittedAt > $now - 3600
+            ));
+            $_SESSION["contact_submission_times"] = $recentSubmissions;
+
+            $lastSubmission = $recentSubmissions === [] ? 0 : max($recentSubmissions);
+
+            if (count($recentSubmissions) >= 5) {
+                $formError = "You have reached the message limit. Please try again later.";
+            } elseif ($lastSubmission > 0 && $now - $lastSubmission < 15) {
+                $formError = "Please wait at least 15 seconds before sending another message.";
+            } else {
+                try {
+                    $stmt = $pdo->prepare(
+                        "INSERT INTO contact_messages (name, email, subject, message)
+                         VALUES (?, ?, ?, ?)"
+                    );
+                    $stmt->execute([$name, $email, $subject, $message]);
+                } catch (Throwable $error) {
+                    $formError = "Unable to send your message right now. Please try again later.";
+                }
+
+                if ($formError === "") {
+                    $recentSubmissions[] = $now;
+                    $_SESSION["contact_submission_times"] = $recentSubmissions;
+                    header("Location: contact.php?sent=1");
+                    exit;
+                }
             }
         }
     }
@@ -153,7 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
               'Instagram' => $contactProfile['instagram_url'] ?? '',
               'YouTube' => $contactProfile['youtube_url'] ?? ''
           ] as $socialLabel => $socialUrl): ?>
-            <?php if ($socialUrl !== '' && filter_var($socialUrl, FILTER_VALIDATE_URL) !== false && parse_url($socialUrl, PHP_URL_SCHEME) === 'https'): ?>
+            <?php if (isSafeHttpUrl((string) $socialUrl)): ?>
               <li><span class="label"><?= htmlspecialchars($socialLabel, ENT_QUOTES, 'UTF-8') ?></span> <a href="<?= htmlspecialchars($socialUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener"><?= htmlspecialchars($socialUrl, ENT_QUOTES, 'UTF-8') ?></a></li>
             <?php endif; ?>
           <?php endforeach; ?>

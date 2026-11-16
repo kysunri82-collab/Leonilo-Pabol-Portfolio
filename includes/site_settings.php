@@ -1,5 +1,19 @@
 <?php
 
+function isSafeHttpUrl(string $url): bool {
+    if ($url === "" || filter_var($url, FILTER_VALIDATE_URL) === false) {
+        return false;
+    }
+
+    $parts = parse_url($url);
+
+    return is_array($parts) &&
+        isset($parts["scheme"], $parts["host"]) &&
+        in_array(strtolower($parts["scheme"]), ["http", "https"], true) &&
+        !isset($parts["user"]) &&
+        !isset($parts["pass"]);
+}
+
 function validateWebsiteLogoPath(string $path): bool {
     if ($path === "") {
         return true;

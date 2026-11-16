@@ -57,9 +57,15 @@ $profile = $stmt->fetch();
     </div>
 
     <div class="link-list" style="margin-top:20px;">
+<?php if (isSafeHttpUrl((string) ($profile['facebook_url'] ?? ''))): ?>
       <div class="link-row"><span>Facebook</span><a href="<?= htmlspecialchars($profile['facebook_url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Visit ↗</a></div>
+<?php endif; ?>
+<?php if (isSafeHttpUrl((string) ($profile['youtube_url'] ?? ''))): ?>
       <div class="link-row"><span>YouTube</span><a href="<?= htmlspecialchars($profile['youtube_url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Watch ↗</a></div>
+<?php endif; ?>
+<?php if (isSafeHttpUrl((string) ($profile['instagram_url'] ?? ''))): ?>
       <div class="link-row"><span>Instagram</span><a href="<?= htmlspecialchars($profile['instagram_url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Follow ↗</a></div>
+<?php endif; ?>
     </div>
   </div>
 </section>

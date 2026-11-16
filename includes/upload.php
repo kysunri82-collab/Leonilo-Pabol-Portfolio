@@ -1,6 +1,9 @@
 <?php
 
 const MAX_IMAGE_UPLOAD_SIZE = 5 * 1024 * 1024;
+const MAX_IMAGE_WIDTH = 6000;
+const MAX_IMAGE_HEIGHT = 6000;
+const MAX_IMAGE_PIXELS = 20000000;
 
 function storeOptionalImageUpload($file): ?string {
     if ($file === null) {
@@ -69,10 +72,27 @@ function storeUploadedImage(array $file): string {
         !is_string($detectedMime) ||
         !isset($allowedImages[$detectedMime]) ||
         !is_array($imageInfo) ||
-        !isset($imageInfo[2]) ||
+        !isset($imageInfo[0], $imageInfo[1], $imageInfo[2]) ||
         $imageInfo[2] !== $allowedImages[$detectedMime]["type"]
     ) {
         throw new InvalidArgumentException("Choose a valid JPG, JPEG, PNG, or WEBP image.");
+    }
+
+    $width = $imageInfo[0];
+    $height = $imageInfo[1];
+
+    if (
+        !is_int($width) ||
+        !is_int($height) ||
+        $width < 1 ||
+        $height < 1 ||
+        $width > MAX_IMAGE_WIDTH ||
+        $height > MAX_IMAGE_HEIGHT ||
+        $width > intdiv(MAX_IMAGE_PIXELS, $height)
+    ) {
+        throw new InvalidArgumentException(
+            "Image dimensions must be no larger than 6000 x 6000 pixels and contain 20 megapixels or fewer."
+        );
     }
 
     $uploadDirectory = dirname(__DIR__) . DIRECTORY_SEPARATOR . "uploads";

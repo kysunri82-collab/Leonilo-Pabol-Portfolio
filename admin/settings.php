@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             value="<?= htmlspecialchars($settings["logo_path"], ENT_QUOTES, 'UTF-8') ?>">
         <br><br>
 
-        <label>Upload a replacement logo (JPG, JPEG, PNG, or WEBP; maximum 5 MB)</label><br>
+        <label>Upload a replacement logo (JPG, JPEG, PNG, or WEBP; maximum 5 MB, 6000 x 6000 pixels, and 20 megapixels)</label><br>
         <input type="file" name="logo_upload" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
         <br><br>
 

@@ -58,6 +58,12 @@ $projects = $stmt->fetchAll();
                  data-title="<?= htmlspecialchars($project['title'], ENT_QUOTES, 'UTF-8') ?>"
                  data-full-desc="<?= htmlspecialchars($project['description'], ENT_QUOTES, 'UTF-8') ?>">
 
+                <?php if (!empty($project['project_image'])): ?>
+                    <img class="project-image"
+                         src="<?= htmlspecialchars($project['project_image'], ENT_QUOTES, 'UTF-8') ?>"
+                         alt="<?= htmlspecialchars($project['title'] . ' project image', ENT_QUOTES, 'UTF-8') ?>">
+                <?php endif; ?>
+
                 <div class="project-kind">
     <?= htmlspecialchars(ucfirst($project['category']), ENT_QUOTES, 'UTF-8') ?> Project
 </div>
@@ -87,7 +93,7 @@ $projects = $stmt->fetchAll();
                         ?>
                     </div>
 
-                    <?php if (!empty($project['project_url'])): ?>
+                    <?php if (isSafeHttpUrl((string) ($project['project_url'] ?? ''))): ?>
                         <a href="<?= htmlspecialchars($project['project_url'], ENT_QUOTES, 'UTF-8') ?>"
                            target="_blank" rel="noopener">View Project ↗</a>
                     <?php endif; ?>

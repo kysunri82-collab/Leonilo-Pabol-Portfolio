@@ -151,7 +151,11 @@ $statLabels = [
     <a href="messages.php">Manage Messages</a>
 </p>
 
-    <a href="logout.php">Logout</a>
+    <form method="POST" action="logout.php">
+        <input type="hidden" name="csrf_token"
+            value="<?= htmlspecialchars(generateCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
+        <button type="submit">Logout</button>
+    </form>
 
 </body>
 </html>

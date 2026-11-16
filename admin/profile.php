@@ -84,12 +84,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Validate social media URLs
     foreach ([$facebook_url, $youtube_url, $instagram_url] as $url) {
-        if ($url !== "" && filter_var($url, FILTER_VALIDATE_URL) === false) {
-            die("Please enter valid social media URLs.");
-        }
-
-        if ($url !== "" && parse_url($url, PHP_URL_SCHEME) !== "https") {
-            die("Social media links must use HTTPS.");
+        if ($url !== "" && !isSafeHttpUrl($url)) {
+            die("Please enter valid HTTP or HTTPS social media URLs.");
         }
     }
 
@@ -192,7 +188,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             value="<?= htmlspecialchars($profile['profile_image'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
         <br><br>
 
-        <label>Upload a replacement profile image (JPG, JPEG, PNG, or WEBP; maximum 5 MB)</label><br>
+        <label>Upload a replacement profile image (JPG, JPEG, PNG, or WEBP; maximum 5 MB, 6000 x 6000 pixels, and 20 megapixels)</label><br>
         <input type="file" name="profile_image_upload" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
         <br><br>
 

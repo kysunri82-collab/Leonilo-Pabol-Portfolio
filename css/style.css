@@ -283,6 +283,12 @@ header {
   transition: transform .2s ease;
 }
 .project-card:hover { transform: translateY(-4px); }
+.project-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
 .project-kind {
   min-height: 42px;
   background: linear-gradient(135deg, var(--navy), var(--navy-2));
