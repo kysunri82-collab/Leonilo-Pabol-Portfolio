@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/security.php';
+require_once __DIR__ . '/../includes/site_settings.php';
+require_once __DIR__ . '/../includes/upload.php';
 
 // Get the existing profile
 $stmt = $pdo->query("SELECT * FROM profile LIMIT 1");
@@ -40,7 +42,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $full_name = trim($_POST["full_name"] ?? "");
     $tagline = trim($_POST["tagline"] ?? "");
     $introduction = trim($_POST["introduction"] ?? "");
-    $profile_image = trim($_POST["profile_image"] ?? "");
+    $submittedProfileImage = trim($_POST["profile_image"] ?? "");
+    $existingProfileImage = $profile["profile_image"] ?? "";
+    $profile_image = $submittedProfileImage !== ""
+        ? $submittedProfileImage
+        : $existingProfileImage;
     $facebook_url = trim($_POST["facebook_url"] ?? "");
     $youtube_url = trim($_POST["youtube_url"] ?? "");
     $instagram_url = trim($_POST["instagram_url"] ?? "");
@@ -87,8 +93,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
+    $uploadedImage = null;
+    try {
+        $uploadedImage = storeOptionalImageUpload($_FILES["profile_image_upload"] ?? null);
+    } catch (InvalidArgumentException $error) {
+        die(htmlspecialchars($error->getMessage(), ENT_QUOTES, 'UTF-8'));
+    } catch (Throwable $error) {
+        die("Unable to process the uploaded image right now.");
+    }
+
+    if ($uploadedImage !== null) {
+        $profile_image = $uploadedImage;
+    } elseif (
+        $profile_image !== "" &&
+        $profile_image !== $existingProfileImage &&
+        !validateWebsiteLogoPath($profile_image)
+    ) {
+        die("Please enter a valid profile image path or HTTPS URL.");
+    }
+
     // Update the database
-    $stmt = $pdo->prepare("
+    try {
+        $stmt = $pdo->prepare("
         UPDATE profile SET
             full_name = ?,
             tagline = ?,
@@ -101,21 +127,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             phone_number = ?,
             location = ?
         WHERE id = ?
-    ");
+        ");
 
-    $stmt->execute([
-        $full_name,
-        $tagline,
-        $introduction,
-        $profile_image,
-        $facebook_url,
-        $youtube_url,
-        $instagram_url,
-        $email !== "" ? $email : null,
-        $phone_number !== "" ? $phone_number : null,
-        $location !== "" ? $location : null,
-        $profile["id"]
-    ]);
+        $stmt->execute([
+            $full_name,
+            $tagline,
+            $introduction,
+            $profile_image !== "" ? $profile_image : null,
+            $facebook_url,
+            $youtube_url,
+            $instagram_url,
+            $email !== "" ? $email : null,
+            $phone_number !== "" ? $phone_number : null,
+            $location !== "" ? $location : null,
+            $profile["id"]
+        ]);
+    } catch (Throwable $error) {
+        if ($uploadedImage !== null) {
+            removeUploadedImage($uploadedImage);
+        }
+        die("Unable to update the profile right now.");
+    }
 
     header("Location: profile.php?updated=1");
     exit;
@@ -135,7 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <p style="color: green;">Profile updated successfully!</p>
 <?php endif; ?>
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
     <input type="hidden" name="csrf_token"
         value="<?= htmlspecialchars(generateCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
 
@@ -158,6 +190,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <label>Profile Image Path</label><br>
         <input type="text" name="profile_image"
             value="<?= htmlspecialchars($profile['profile_image'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        <br><br>
+
+        <label>Upload a replacement profile image (JPG, JPEG, PNG, or WEBP; maximum 5 MB)</label><br>
+        <input type="file" name="profile_image_upload" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
         <br><br>
 
         <label>Email</label><br>

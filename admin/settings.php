@@ -3,8 +3,10 @@ require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/security.php';
 require_once __DIR__ . '/../includes/site_settings.php';
+require_once __DIR__ . '/../includes/upload.php';
 
 $settings = getWebsiteSettings($pdo);
+$existingSettings = $settings;
 $formError = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -29,17 +31,39 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($formError === "") {
         $settings["website_title"] = trim($postedValues[0]);
-        $settings["logo_path"] = trim($postedValues[1]);
+        $submittedLogoPath = trim($postedValues[1]);
+        $settings["logo_path"] = $submittedLogoPath !== ""
+            ? $submittedLogoPath
+            : ($settings["logo_path"] ?? "");
         $settings["appearance_color"] = trim($postedValues[2]);
 
         if ($settings["website_title"] === "") {
             $formError = "Website title is required.";
         } elseif (mb_strlen($settings["website_title"]) > 150) {
             $formError = "Website title must be 150 characters or fewer.";
-        } elseif (!validateWebsiteLogoPath($settings["logo_path"])) {
-            $formError = "Use a local image path or a valid HTTPS image URL for the logo.";
         } elseif (!preg_match('/^#[0-9A-Fa-f]{6}$/D', $settings["appearance_color"])) {
             $formError = "Appearance color must be a six-digit hexadecimal color.";
+        }
+    }
+
+    if ($formError === "") {
+        $uploadedImage = null;
+        try {
+            $uploadedImage = storeOptionalImageUpload($_FILES["logo_upload"] ?? null);
+        } catch (InvalidArgumentException $error) {
+            $formError = $error->getMessage();
+        } catch (Throwable $error) {
+            $formError = "Unable to process the uploaded logo right now.";
+        }
+
+        if ($formError === "" && $uploadedImage !== null) {
+            $settings["logo_path"] = $uploadedImage;
+        } elseif (
+            $formError === "" &&
+            $settings["logo_path"] !== "" &&
+            !validateWebsiteLogoPath($settings["logo_path"])
+        ) {
+            $formError = "Use a local image path or a valid HTTPS image URL for the logo.";
         }
     }
 
@@ -59,6 +83,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $settings["appearance_color"]
             ]);
         } catch (Throwable $error) {
+            if ($uploadedImage !== null) {
+                removeUploadedImage($uploadedImage);
+                $settings["logo_path"] = $existingSettings["logo_path"];
+            }
             $formError = "Unable to save website settings right now.";
         }
 
@@ -86,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <p><?= htmlspecialchars($formError, ENT_QUOTES, 'UTF-8') ?></p>
     <?php endif; ?>
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token"
             value="<?= htmlspecialchars(generateCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
 
@@ -99,6 +127,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <label>Logo Path or HTTPS URL</label><br>
         <input type="text" name="logo_path" maxlength="255"
             value="<?= htmlspecialchars($settings["logo_path"], ENT_QUOTES, 'UTF-8') ?>">
+        <br><br>
+
+        <label>Upload a replacement logo (JPG, JPEG, PNG, or WEBP; maximum 5 MB)</label><br>
+        <input type="file" name="logo_upload" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
         <br><br>
 
         <label>Appearance Color</label><br>

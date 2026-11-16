@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/security.php';
+require_once __DIR__ . '/../includes/site_settings.php';
+require_once __DIR__ . '/../includes/upload.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
@@ -17,6 +19,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $description = trim($_POST["description"] ?? "");
     $category = $_POST["category"] ?? "school";
     $technologies = trim($_POST["technologies"] ?? "");
+
+    if (!is_string($_POST["project_image"] ?? "")) {
+        die("Please enter a valid project image path.");
+    }
 
     $project_image = trim($_POST["project_image"] ?? "");
     $project_url = trim($_POST["project_url"] ?? "");
@@ -36,8 +42,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
+    $uploadedImage = null;
+    try {
+        $uploadedImage = storeOptionalImageUpload($_FILES["project_image_upload"] ?? null);
+    } catch (InvalidArgumentException $error) {
+        die(htmlspecialchars($error->getMessage(), ENT_QUOTES, 'UTF-8'));
+    } catch (Throwable $error) {
+        die("Unable to process the uploaded image right now.");
+    }
+
+    if ($uploadedImage !== null) {
+        $project_image = $uploadedImage;
+    } elseif ($project_image !== "" && !validateWebsiteLogoPath($project_image)) {
+        die("Please enter a valid project image path or HTTPS URL.");
+    }
+
     // Insert project into database
-$stmt = $pdo->prepare("
+    try {
+        $stmt = $pdo->prepare("
     INSERT INTO projects (
         title,
         description,
@@ -48,14 +70,20 @@ $stmt = $pdo->prepare("
     ) VALUES (?, ?, ?, ?, ?, ?)
 ");
 
-$stmt->execute([
-    $title,
-    $description,
-    $category,
-    $technologies,
-    $project_image,
-    $project_url
-]);
+        $stmt->execute([
+            $title,
+            $description,
+            $category,
+            $technologies,
+            $project_image,
+            $project_url
+        ]);
+    } catch (Throwable $error) {
+        if ($uploadedImage !== null) {
+            removeUploadedImage($uploadedImage);
+        }
+        die("Unable to save the project right now.");
+    }
 
     header("Location: projects.php?added=1");
     exit;
@@ -73,7 +101,7 @@ $stmt->execute([
 
     <h1>Add New Project</h1>
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
 
         <input type="hidden" name="csrf_token"
             value="<?= htmlspecialchars(generateCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
@@ -100,6 +128,10 @@ $stmt->execute([
 
         <label>Project Image Path</label><br>
         <input type="text" name="project_image">
+        <br><br>
+
+        <label>Upload Project Image (JPG, JPEG, PNG, or WEBP; maximum 5 MB)</label><br>
+        <input type="file" name="project_image_upload" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
         <br><br>
 
         <label>Project URL</label><br>

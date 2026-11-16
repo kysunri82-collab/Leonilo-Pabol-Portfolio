@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/security.php';
+require_once __DIR__ . '/../includes/site_settings.php';
+require_once __DIR__ . '/../includes/upload.php';
 
 // Get project ID from URL
 $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
@@ -32,7 +34,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $description = trim($_POST["description"] ?? "");
     $category = $_POST["category"] ?? "school";
     $technologies = trim($_POST["technologies"] ?? "");
-    $project_image = trim($_POST["project_image"] ?? "");
+
+    if (!is_string($_POST["project_image"] ?? "")) {
+        die("Please enter a valid project image path.");
+    }
+
+    $submittedImagePath = trim($_POST["project_image"] ?? "");
+    $existingImagePath = $project['project_image'] ?? "";
+    $project_image = $submittedImagePath !== ""
+        ? $submittedImagePath
+        : $existingImagePath;
     $project_url = trim($_POST["project_url"] ?? "");
 
     if ($title === "" || $description === "") {
@@ -48,7 +59,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    $stmt = $pdo->prepare("
+    $uploadedImage = null;
+    try {
+        $uploadedImage = storeOptionalImageUpload($_FILES["project_image_upload"] ?? null);
+    } catch (InvalidArgumentException $error) {
+        die(htmlspecialchars($error->getMessage(), ENT_QUOTES, 'UTF-8'));
+    } catch (Throwable $error) {
+        die("Unable to process the uploaded image right now.");
+    }
+
+    if ($uploadedImage !== null) {
+        $project_image = $uploadedImage;
+    } elseif (
+        $project_image !== "" &&
+        $project_image !== $existingImagePath &&
+        !validateWebsiteLogoPath($project_image)
+    ) {
+        die("Please enter a valid project image path or HTTPS URL.");
+    }
+
+    try {
+        $stmt = $pdo->prepare("
     UPDATE projects SET
         title = ?,
         description = ?,
@@ -59,15 +90,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     WHERE id = ?
 ");
 
-$stmt->execute([
-    $title,
-    $description,
-    $category,
-    $technologies,
-    $project_image,
-    $project_url,
-    $id
-]);
+        $stmt->execute([
+            $title,
+            $description,
+            $category,
+            $technologies,
+            $project_image,
+            $project_url,
+            $id
+        ]);
+    } catch (Throwable $error) {
+        if ($uploadedImage !== null) {
+            removeUploadedImage($uploadedImage);
+        }
+        die("Unable to update the project right now.");
+    }
     header("Location: projects.php?updated=1");
     exit;
 }
@@ -88,7 +125,7 @@ if (!$project) {
 
     <h1>Edit Project</h1>
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
 
         <input type="hidden" name="csrf_token"
             value="<?= htmlspecialchars(generateCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
@@ -119,6 +156,10 @@ if (!$project) {
         <label>Project Image Path</label><br>
         <input type="text" name="project_image"
             value="<?= htmlspecialchars($project['project_image'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        <br><br>
+
+        <label>Upload a replacement image (JPG, JPEG, PNG, or WEBP; maximum 5 MB)</label><br>
+        <input type="file" name="project_image_upload" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
         <br><br>
 
         <label>Project URL</label><br>
