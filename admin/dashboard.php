@@ -25,6 +25,9 @@ require_once __DIR__ . '/../includes/auth.php';
 <p>
     <a href="projects.php">Manage My Projects</a>
 </p>
+<p>
+    <a href="skills.php">Manage My Skills</a>
+</p>
 
     <a href="logout.php">Logout</a>
 

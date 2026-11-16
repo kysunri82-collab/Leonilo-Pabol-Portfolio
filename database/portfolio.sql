@@ -92,6 +92,7 @@ CREATE TABLE `projects` (
 CREATE TABLE `skills` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `skill_name` varchar(100) NOT NULL,
+  `category` VARCHAR(100) NOT NULL DEFAULT 'General',
   `description` text NOT NULL,
   `skill_level` varchar(50) NOT NULL,
   `display_order` int(11) NOT NULL DEFAULT 0,
