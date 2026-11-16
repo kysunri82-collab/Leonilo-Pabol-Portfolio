@@ -40,17 +40,59 @@ $endDate = $experience['end_date'] ?? "";
 $description = $experience['description'] ?? "";
 $displayOrderInput = (string) $experience['display_order'];
 $formError = "";
-$isValidDate = static function (string $date): bool {
-    if ($date === "") {
-        return true;
+$monthNumbers = [
+    'january' => 1, 'jan' => 1,
+    'february' => 2, 'feb' => 2,
+    'march' => 3, 'mar' => 3,
+    'april' => 4, 'apr' => 4,
+    'may' => 5,
+    'june' => 6, 'jun' => 6,
+    'july' => 7, 'jul' => 7,
+    'august' => 8, 'aug' => 8,
+    'september' => 9, 'sep' => 9,
+    'october' => 10, 'oct' => 10,
+    'november' => 11, 'nov' => 11,
+    'december' => 12, 'dec' => 12
+];
+$getPeriodBounds = static function (string $period) use ($monthNumbers): ?array {
+    if (preg_match('/^(?!0000)(\d{4})$/D', $period, $matches)) {
+        return [$matches[1] . '0101', $matches[1] . '1231'];
     }
 
-    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/D', $date)) {
-        return false;
+    if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/D', $period, $matches)) {
+        $year = (int) $matches[1];
+        $month = (int) $matches[2];
+        $day = (int) $matches[3];
+        if (!checkdate($month, $day, $year)) {
+            return null;
+        }
+
+        $date = sprintf('%04d%02d%02d', $year, $month, $day);
+        return [$date, $date];
     }
 
-    [$year, $month, $day] = array_map('intval', explode('-', $date));
-    return checkdate($month, $day, $year);
+    if (preg_match('/^([A-Za-z]+)\s+(\d{4})$/D', $period, $matches)) {
+        $month = $monthNumbers[strtolower($matches[1])] ?? null;
+        $year = (int) $matches[2];
+        if ($month === null || $year < 1) {
+            return null;
+        }
+
+        $lastDay = 31;
+        while ($lastDay > 28 && !checkdate($month, $lastDay, $year)) {
+            $lastDay--;
+        }
+
+        return [
+            sprintf('%04d%02d01', $year, $month),
+            sprintf('%04d%02d%02d', $year, $month, $lastDay)
+        ];
+    }
+
+    return null;
+};
+$isValidPeriod = static function (string $period) use ($getPeriodBounds): bool {
+    return $period === '' || $getPeriodBounds($period) !== null;
 };
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -92,10 +134,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             mb_strlen($description) > 10000
         ) {
             $formError = "Please keep the submitted values within the allowed lengths.";
-        } elseif (!$isValidDate($startDate) || !$isValidDate($endDate)) {
-            $formError = "Enter dates in a valid YYYY-MM-DD format.";
-        } elseif ($startDate !== "" && $endDate !== "" && $endDate < $startDate) {
-            $formError = "End date cannot be earlier than start date.";
+        } elseif (mb_strlen($startDate) > 50 || mb_strlen($endDate) > 50) {
+            $formError = "Each period must be 50 characters or fewer.";
+        } elseif (!$isValidPeriod($startDate) || !$isValidPeriod($endDate)) {
+            $formError = "Use a year (YYYY), month and year (for example, July 2025), or a valid date (YYYY-MM-DD).";
+        } elseif (
+            $startDate !== "" &&
+            $endDate !== "" &&
+            $getPeriodBounds($startDate)[0] > $getPeriodBounds($endDate)[1]
+        ) {
+            $formError = "End period cannot be earlier than start period.";
         } elseif (!ctype_digit($displayOrderInput)) {
             $formError = "Display order must be a non-negative whole number.";
         } else {
@@ -171,14 +219,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             value="<?= htmlspecialchars($organization, ENT_QUOTES, 'UTF-8') ?>" required>
         <br><br>
 
-        <label>Start Date</label><br>
-        <input type="date" name="start_date"
+        <label>Start Period / Date</label><br>
+        <input type="text" name="start_date" maxlength="50"
+            placeholder="2024, July 2025, or 2024-07-15"
             value="<?= htmlspecialchars($startDate, ENT_QUOTES, 'UTF-8') ?>">
         <br><br>
 
-        <label>End Date</label><br>
-        <input type="date" name="end_date"
+        <label>End Period / Date</label><br>
+        <input type="text" name="end_date" maxlength="50"
+            placeholder="2026, September 2025, or 2025-09-30"
             value="<?= htmlspecialchars($endDate, ENT_QUOTES, 'UTF-8') ?>">
+        <small>For a range such as 2024&ndash;2026, enter 2024 as the start and 2026 as the end. Month/year and full dates are also supported.</small>
         <br><br>
 
         <label>Description</label><br>
