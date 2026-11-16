@@ -4,12 +4,27 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once __DIR__ . '/includes/security.php';
+require_once __DIR__ . '/includes/site_settings.php';
 
 try {
     require_once __DIR__ . '/includes/db.php';
 } catch (Throwable $error) {
     http_response_code(500);
     die("Unable to process your message right now. Please try again later.");
+}
+
+$websiteSettings = getWebsiteSettings($pdo);
+
+$contactProfile = [];
+try {
+    $profileStmt = $pdo->query(
+        "SELECT email, phone_number, location, facebook_url, youtube_url, instagram_url
+         FROM profile
+         LIMIT 1"
+    );
+    $contactProfile = $profileStmt->fetch() ?: [];
+} catch (Throwable $error) {
+    // The contact form remains available if profile details cannot be loaded.
 }
 
 $name = "";
@@ -87,16 +102,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leonilo Pabol | Contact</title>
+<title><?= htmlspecialchars($websiteSettings['website_title'] . ' | Contact', ENT_QUOTES, 'UTF-8') ?></title>
 <link rel="stylesheet" href="css/style.css">
+<style>:root { --accent: <?= htmlspecialchars($websiteSettings['appearance_color'], ENT_QUOTES, 'UTF-8') ?>; }</style>
 </head>
 <body>
 
 <header>
-  <a href="index.html" class="brand">LEONILO PABOL</a>
+  <a href="index.php" class="brand"><?php if ($websiteSettings['logo_path'] !== ''): ?><img src="<?= htmlspecialchars($websiteSettings['logo_path'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($websiteSettings['website_title'], ENT_QUOTES, 'UTF-8') ?>" style="max-height:52px;max-width:220px;width:auto;object-fit:contain;"><?php else: ?><?= htmlspecialchars(strtoupper($websiteSettings['website_title']), ENT_QUOTES, 'UTF-8') ?><?php endif; ?></a>
   <div class="navbar">
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
+      <li><a href="index.php">Home</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="skills.html">Skills</a></li>
       <li><a href="projects.html">Projects</a></li>
@@ -114,22 +130,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <p class="section-sub">Have a project or opportunity in mind? Reach out below.</p>
 
     <?php if ($messageSent): ?>
-      <p class="form-status" role="status">Thanks for your message. I'll be in touch soon.</p>
+      <p class="form-status show success" role="status">Thanks for your message. I'll be in touch soon.</p>
     <?php elseif ($formError !== ""): ?>
-      <p class="form-status" role="alert"><?= htmlspecialchars($formError, ENT_QUOTES, 'UTF-8') ?></p>
+      <p class="form-status show error" role="alert"><?= htmlspecialchars($formError, ENT_QUOTES, 'UTF-8') ?></p>
     <?php endif; ?>
 
     <div class="contact-grid">
       <div class="contact-info">
         <ul>
-          <li><span class="label">Email</span> <a href="mailto:kysunri82@gmail.com">kysunri82@gmail.com</a></li>
-          <li><span class="label">Facebook</span> <a href="https://www.facebook.com/leiyhoui" target="_blank" rel="noopener">facebook.com/leiyhoui</a></li>
-          <li><span class="label">Instagram</span> <a href="https://www.instagram.com/leomazingri/" target="_blank" rel="noopener">instagram.com/leomazingri</a></li>
-          <li><span class="label">YouTube</span> <a href="https://www.youtube.com/@talmidkysun9687" target="_blank" rel="noopener">youtube.com/@talmidkysun9687</a></li>
+          <?php if (!empty($contactProfile['email'])): ?>
+            <li><span class="label">Email</span> <a href="mailto:<?= htmlspecialchars($contactProfile['email'], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($contactProfile['email'], ENT_QUOTES, 'UTF-8') ?></a></li>
+          <?php endif; ?>
+          <?php if (!empty($contactProfile['phone_number'])): ?>
+            <?php $phoneHref = preg_replace('/[^0-9+]/', '', $contactProfile['phone_number']); ?>
+            <li><span class="label">Phone</span> <a href="tel:<?= htmlspecialchars($phoneHref, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($contactProfile['phone_number'], ENT_QUOTES, 'UTF-8') ?></a></li>
+          <?php endif; ?>
+          <?php if (!empty($contactProfile['location'])): ?>
+            <li><span class="label">Location</span> <?= htmlspecialchars($contactProfile['location'], ENT_QUOTES, 'UTF-8') ?></li>
+          <?php endif; ?>
+          <?php foreach ([
+              'Facebook' => $contactProfile['facebook_url'] ?? '',
+              'Instagram' => $contactProfile['instagram_url'] ?? '',
+              'YouTube' => $contactProfile['youtube_url'] ?? ''
+          ] as $socialLabel => $socialUrl): ?>
+            <?php if ($socialUrl !== '' && filter_var($socialUrl, FILTER_VALIDATE_URL) !== false && parse_url($socialUrl, PHP_URL_SCHEME) === 'https'): ?>
+              <li><span class="label"><?= htmlspecialchars($socialLabel, ENT_QUOTES, 'UTF-8') ?></span> <a href="<?= htmlspecialchars($socialUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener"><?= htmlspecialchars($socialUrl, ENT_QUOTES, 'UTF-8') ?></a></li>
+            <?php endif; ?>
+          <?php endforeach; ?>
         </ul>
       </div>
 
-      <form method="POST" action="contact.php">
+      <form class="contact-form" method="POST" action="contact.php">
         <input type="hidden" name="csrf_token"
           value="<?= htmlspecialchars(generateCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
 

@@ -23,6 +23,9 @@ require_once __DIR__ . '/../includes/auth.php';
     <a href="profile.php">Manage My Profile</a>
 </p>
 <p>
+    <a href="settings.php">Website Settings</a>
+</p>
+<p>
     <a href="projects.php">Manage My Projects</a>
 </p>
 <p>

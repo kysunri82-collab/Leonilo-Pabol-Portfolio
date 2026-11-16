@@ -13,6 +13,7 @@
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
+  initWebsiteSettings();
   initMobileNav();
   initThemeToggle();
   initScrollTopButton();
@@ -20,6 +21,61 @@ document.addEventListener("DOMContentLoaded", function () {
   initContactForm();
   initProjectFilter();
 });
+
+/* ---------------------------------------------------------
+   0. WEBSITE SETTINGS
+   Apply the saved title, logo, and accent color across public pages.
+--------------------------------------------------------- */
+function initWebsiteSettings() {
+  fetch("site_settings.php", { headers: { "Accept": "application/json" } })
+    .then(function (response) {
+      if (!response.ok) throw new Error("Settings are unavailable.");
+      return response.json();
+    })
+    .then(function (settings) {
+      const websiteTitle = typeof settings.website_title === "string"
+        ? settings.website_title.trim()
+        : "";
+
+      if (websiteTitle !== "") {
+        const titleParts = document.title.split("|");
+        const pageTitle = titleParts.length > 1
+          ? titleParts.slice(1).join("|").trim()
+          : "";
+        document.title = pageTitle ? websiteTitle + " | " + pageTitle : websiteTitle;
+
+        document.querySelectorAll(".brand").forEach(function (brand) {
+          if (typeof settings.logo_path === "string" && settings.logo_path !== "") {
+            const logo = document.createElement("img");
+            logo.src = settings.logo_path;
+            logo.alt = websiteTitle;
+            logo.style.maxHeight = "52px";
+            logo.style.maxWidth = "220px";
+            logo.style.width = "auto";
+            logo.style.objectFit = "contain";
+            brand.replaceChildren(logo);
+          } else {
+            brand.textContent = websiteTitle;
+            brand.style.textTransform = "uppercase";
+          }
+        });
+
+        const footerYear = document.querySelector("footer #year");
+        if (footerYear && footerYear.parentNode) {
+          const footerLine = footerYear.parentNode;
+          footerLine.firstChild.textContent = websiteTitle + "'s Portfolio ";
+        }
+      }
+
+      if (typeof settings.appearance_color === "string" &&
+          /^#[0-9a-f]{6}$/i.test(settings.appearance_color)) {
+        document.documentElement.style.setProperty("--accent", settings.appearance_color);
+      }
+    })
+    .catch(function () {
+      // Keep the existing page title, brand, and stylesheet defaults on failure.
+    });
+}
 
 /* ---------------------------------------------------------
    1. MOBILE NAVIGATION

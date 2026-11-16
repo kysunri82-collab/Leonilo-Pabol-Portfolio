@@ -59,11 +59,28 @@ CREATE TABLE `profile` (
   `full_name` varchar(100) NOT NULL,
   `tagline` varchar(150) NOT NULL,
   `introduction` text NOT NULL,
+  `email` varchar(254) DEFAULT NULL,
+  `phone_number` varchar(50) DEFAULT NULL,
+  `location` varchar(150) DEFAULT NULL,
   `profile_image` varchar(255) DEFAULT NULL,
   `facebook_url` varchar(255) DEFAULT NULL,
   `youtube_url` varchar(255) DEFAULT NULL,
   `instagram_url` varchar(255) DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `settings`
+--
+
+CREATE TABLE `settings` (
+  `id` tinyint unsigned NOT NULL DEFAULT 1,
+  `website_title` varchar(150) NOT NULL DEFAULT 'Leonilo Pabol',
+  `logo_path` varchar(255) DEFAULT NULL,
+  `appearance_color` char(7) NOT NULL DEFAULT '#e8c61f',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
