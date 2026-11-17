@@ -20,6 +20,20 @@ $environmentValues = [
     "DB_USER" => getenv("DB_USER"),
     "DB_PASSWORD" => getenv("DB_PASSWORD")
 ];
+$databasePortValue = getenv("DB_PORT");
+
+if ($databasePortValue === false) {
+    $databasePort = 3306;
+} elseif (
+    !preg_match('/^\d+$/D', $databasePortValue) ||
+    (int) $databasePortValue < 1 ||
+    (int) $databasePortValue > 65535
+) {
+    http_response_code(500);
+    die("Database port configuration is invalid.");
+} else {
+    $databasePort = (int) $databasePortValue;
+}
 
 if ($isDevelopment) {
     $host = $environmentValues["DB_HOST"] !== false && trim($environmentValues["DB_HOST"]) !== ""
@@ -50,7 +64,7 @@ if ($isDevelopment) {
 
 try {
     $pdo = new PDO(
-        "mysql:host=$host;dbname=$dbname;charset=utf8mb4",
+        "mysql:host=$host;port=$databasePort;dbname=$dbname;charset=utf8mb4",
         $username,
         $password,
         [
