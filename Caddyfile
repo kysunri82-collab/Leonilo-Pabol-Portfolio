@@ -1,0 +1,45 @@
+
+{
+    admin off
+    persist_config off
+    auto_https off
+
+    {$CADDY_GLOBAL_OPTIONS}
+
+    log {
+        format json
+        output stderr
+        level INFO
+    }
+
+    frankenphp {
+        {$FRANKENPHP_CONFIG}
+    }
+}
+
+{$CADDY_EXTRA_CONFIG}
+
+:{$PORT:80} {
+    root * /app
+    encode zstd br gzip
+
+    @private path_regexp private (?i)(^|/)(\.env[^/]*|\.git|\.htaccess|\.user\.ini)(/|$)
+    @database path /database /database/*
+    @backups path_regexp backups (?i)^/.*\.(sql|dump|bak|backup)(\.(gz|bz2|xz|zip))?$
+
+    @uploads_non_image {
+        path /uploads /uploads/*
+        not path_regexp (?i)^/uploads/.*\.(jpg|png|webp)$
+    }
+
+    {$CADDY_SERVER_EXTRA_DIRECTIVES}
+
+    route {
+        respond @private 404
+        respond @database 404
+        respond @backups 404
+        respond @uploads_non_image 404
+
+        php_server
+    }
+}
