@@ -3,6 +3,9 @@
 
 # Private email and database credentials
 .env
+.env.*
+!.env.example
+!.env.*.example
 
 # Temporary files
 *.log

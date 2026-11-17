@@ -1,0 +1,4 @@
+RewriteEngine On
+
+RewriteRule ^\.git(?:/|$) - [F,L,NC]
+RewriteRule ^database/.*\.(?:sql|dump|bak|backup)(?:\.(?:gz|bz2|xz|zip))?$ - [F,L,NC]
