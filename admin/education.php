@@ -16,7 +16,7 @@ try {
     $stmt = $pdo->query(
         "SELECT id, school, degree, start_year, end_year, description
          FROM education
-         ORDER BY display_order ASC"
+         ORDER BY display_order ASC, id ASC"
     );
     $educationRecords = $stmt->fetchAll();
 } catch (Throwable $error) {

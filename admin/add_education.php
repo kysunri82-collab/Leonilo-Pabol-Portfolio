@@ -16,6 +16,9 @@ $endYear = "";
 $description = "";
 $displayOrderInput = "0";
 $formError = "";
+$isValidYear = static function (string $year): bool {
+    return $year === "" || preg_match('/^(?!0000)\d{4}$/D', $year) === 1;
+};
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
@@ -59,6 +62,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             mb_strlen($description) > 10000
         ) {
             $formError = "Please keep the submitted values within the allowed lengths.";
+        } elseif (!$isValidYear($startYear) || !$isValidYear($endYear)) {
+            $formError = "Start year and end year must be valid four-digit years.";
         } elseif (!ctype_digit($displayOrderInput)) {
             $formError = "Display order must be a non-negative whole number.";
         } else {

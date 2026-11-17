@@ -23,6 +23,10 @@ try {
     require_once __DIR__ . '/../includes/db.php';
     $stmt = $pdo->prepare("DELETE FROM education WHERE id = ?");
     $stmt->execute([$id]);
+    if ($stmt->rowCount() < 1) {
+        header("Location: education.php?error=not_found");
+        exit;
+    }
 } catch (Throwable $error) {
     header("Location: education.php?error=delete");
     exit;
