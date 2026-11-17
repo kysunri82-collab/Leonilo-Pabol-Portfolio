@@ -145,13 +145,22 @@ CREATE TABLE `experience` (
   `id` int NOT NULL AUTO_INCREMENT,
   `job_title` varchar(200) NOT NULL,
   `organization` varchar(200) NOT NULL,
-  `start_date` date DEFAULT NULL,
-  `end_date` date DEFAULT NULL,
+  `start_date` varchar(50) DEFAULT NULL,
+  `end_date` varchar(50) DEFAULT NULL,
   `description` text,
   `display_order` int NOT NULL DEFAULT 0,
   `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `experience`
+--
+
+INSERT INTO `experience` (`id`, `job_title`, `organization`, `start_date`, `end_date`, `description`, `display_order`, `created_at`) VALUES
+(2, 'Student Worker', 'Student Movement for Christ International (SMCI)', '2024', '2026', 'Served as a student worker, supporting campus ministry activities, student fellowships, evangelism, and Christian leadership initiatives. Helped organize activities that encouraged students to grow in faith, build relationships, and become godly, competent leaders.', 0, '2026-11-16 16:20:36'),
+(3, 'Organization President', 'SMCI NORSU', NULL, NULL, 'Served as the student organization''s president, helping lead campus ministry initiatives, coordinate fellowships, encourage student participation, and support the mission of bringing Christ to the campus.', 1, '2026-11-16 16:20:36'),
+(4, 'Customer Service Representative (CSR)', 'Inspiro Dumaguete', 'July 2025', 'September 2025', 'Worked as a Customer Service Representative, assisting customers with their concerns, communicating professionally, providing customer support, and developing problem-solving and customer service skills.', 2, '2026-11-16 16:20:36');
 
 -- --------------------------------------------------------
 
@@ -169,6 +178,21 @@ CREATE TABLE `achievements` (
   `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `achievements`
+--
+
+INSERT INTO `achievements` (`id`, `title`, `organization`, `achievement_date`, `description`, `display_order`, `created_at`) VALUES
+(1, 'Regional Schools Press Conference (RSPC)', NULL, '2024', 'Qualified for the Regional Schools Press Conference in Copyreading and Headline Writing, and participated as an Assistant Layout Artist.', 1, '2026-11-17 11:51:49'),
+(2, 'Debate Contest Winner', NULL, NULL, NULL, 2, '2026-11-17 11:51:49'),
+(3, 'Senior High School Graduate With Honors', NULL, NULL, 'Graduated from senior high school with honors in recognition of academic performance.', 3, '2026-11-17 11:51:49'),
+(4, 'Animation Course – Video Advertisement Project', NULL, NULL, NULL, 4, '2026-11-17 11:51:49'),
+(5, 'Leading Through Change: Adapt. Inspire. Transform.', NULL, NULL, NULL, 5, '2026-11-17 11:51:49'),
+(6, 'Data Analytics for Decision-Making: Turn Data into Insights. Turn Insights into Action.', NULL, NULL, NULL, 6, '2026-11-17 11:51:49'),
+(7, 'Smart Finance for Business: Control Costs. Improve Cash Flow. Protect Profit.', NULL, NULL, NULL, 7, '2026-11-17 11:51:49'),
+(8, 'Cloud Computing & Digital Workplace: Work Smarter. Collaborate Anywhere.', NULL, NULL, NULL, 8, '2026-11-17 11:51:49'),
+(9, 'Customer Experience Excellence: Turn Customers into Loyal Customers.', NULL, NULL, NULL, 9, '2026-11-17 11:51:49');
 
 -- --------------------------------------------------------
 
