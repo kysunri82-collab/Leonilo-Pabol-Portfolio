@@ -15,17 +15,38 @@ $achievementDate = "";
 $description = "";
 $displayOrderInput = "0";
 $formError = "";
-$isValidDate = static function (string $date): bool {
-    if ($date === "") {
+$monthNumbers = [
+    'january' => 1, 'jan' => 1,
+    'february' => 2, 'feb' => 2,
+    'march' => 3, 'mar' => 3,
+    'april' => 4, 'apr' => 4,
+    'may' => 5,
+    'june' => 6, 'jun' => 6,
+    'july' => 7, 'jul' => 7,
+    'august' => 8, 'aug' => 8,
+    'september' => 9, 'sep' => 9,
+    'october' => 10, 'oct' => 10,
+    'november' => 11, 'nov' => 11,
+    'december' => 12, 'dec' => 12
+];
+$isValidAchievementDate = static function (string $date) use ($monthNumbers): bool {
+    if ($date === '') {
         return true;
     }
 
-    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/D', $date)) {
-        return false;
+    if (preg_match('/^(?!0000)\d{4}$/D', $date)) {
+        return true;
     }
 
-    [$year, $month, $day] = array_map('intval', explode('-', $date));
-    return checkdate($month, $day, $year);
+    if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/D', $date, $matches)) {
+        return checkdate((int) $matches[2], (int) $matches[3], (int) $matches[1]);
+    }
+
+    if (preg_match('/^([A-Za-z]+)\s+(\d{4})$/D', $date, $matches)) {
+        return isset($monthNumbers[strtolower($matches[1])]) && (int) $matches[2] > 0;
+    }
+
+    return false;
 };
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -62,11 +83,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } elseif (
             mb_strlen($title) > 200 ||
             mb_strlen($organization) > 200 ||
+            mb_strlen($achievementDate) > 50 ||
             mb_strlen($description) > 10000
         ) {
             $formError = "Please keep the submitted values within the allowed lengths.";
-        } elseif (!$isValidDate($achievementDate)) {
-            $formError = "Enter the achievement date in a valid YYYY-MM-DD format.";
+        } elseif (!$isValidAchievementDate($achievementDate)) {
+            $formError = "Enter a year (YYYY), month and year (for example, July 2025), or a valid date (YYYY-MM-DD).";
         } elseif (!ctype_digit($displayOrderInput)) {
             $formError = "Display order must be a non-negative whole number.";
         } else {
@@ -134,8 +156,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             value="<?= htmlspecialchars($organization, ENT_QUOTES, 'UTF-8') ?>">
         <br><br>
 
-        <label>Achievement Date</label><br>
-        <input type="date" name="achievement_date"
+        <label>Achievement Date or Period</label><br>
+        <input type="text" name="achievement_date" maxlength="50"
+            placeholder="2024, July 2025, or 2025-07-15"
             value="<?= htmlspecialchars($achievementDate, ENT_QUOTES, 'UTF-8') ?>">
         <br><br>
 

@@ -163,7 +163,7 @@ CREATE TABLE `achievements` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(200) NOT NULL,
   `organization` varchar(200) DEFAULT NULL,
-  `achievement_date` date DEFAULT NULL,
+  `achievement_date` varchar(50) DEFAULT NULL,
   `description` text,
   `display_order` int NOT NULL DEFAULT 0,
   `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
