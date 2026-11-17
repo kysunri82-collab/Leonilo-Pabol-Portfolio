@@ -22,12 +22,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         die("Invalid security token. Please refresh the page.");
     }
 
-    // Get form values
-    $skillName = trim($_POST["skill_name"] ?? "");
-    $category = trim($_POST["category"] ?? "");
-    $description = trim($_POST["description"] ?? "");
-    $skillLevel = trim($_POST["skill_level"] ?? "");
-    $displayOrderInput = trim($_POST["display_order"] ?? "");
+    // Get and type-check form values before trimming them.
+    $postedValues = [
+        "skill_name" => $_POST["skill_name"] ?? "",
+        "category" => $_POST["category"] ?? "",
+        "description" => $_POST["description"] ?? "",
+        "skill_level" => $_POST["skill_level"] ?? "",
+        "display_order" => $_POST["display_order"] ?? ""
+    ];
+
+    foreach ($postedValues as $value) {
+        if (!is_string($value)) {
+            die("Please submit valid text for all fields.");
+        }
+    }
+
+    $skillName = trim($postedValues["skill_name"]);
+    $category = trim($postedValues["category"]);
+    $description = trim($postedValues["description"]);
+    $skillLevel = trim($postedValues["skill_level"]);
+    $displayOrderInput = trim($postedValues["display_order"]);
 
     // Check required fields
     if ($skillName === "" || $category === "" || $description === "" || $skillLevel === "" || $displayOrderInput === "") {
