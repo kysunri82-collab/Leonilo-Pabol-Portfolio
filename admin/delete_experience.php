@@ -23,6 +23,10 @@ try {
     require_once __DIR__ . '/../includes/db.php';
     $stmt = $pdo->prepare("DELETE FROM experience WHERE id = ?");
     $stmt->execute([$id]);
+    if ($stmt->rowCount() < 1) {
+        header("Location: experience.php?error=not_found");
+        exit;
+    }
 } catch (Throwable $error) {
     header("Location: experience.php?error=delete");
     exit;
