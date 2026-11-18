@@ -6,6 +6,7 @@
 .env.*
 !.env.example
 !.env.*.example
+/private_config/db_config.php
 
 # Temporary files
 *.log

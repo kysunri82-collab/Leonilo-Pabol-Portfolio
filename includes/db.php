@@ -22,19 +22,6 @@ $environmentValues = [
 ];
 $databasePortValue = getenv("DB_PORT");
 
-if ($databasePortValue === false) {
-    $databasePort = 3306;
-} elseif (
-    !preg_match('/^\d+$/D', $databasePortValue) ||
-    (int) $databasePortValue < 1 ||
-    (int) $databasePortValue > 65535
-) {
-    http_response_code(500);
-    die("Database port configuration is invalid.");
-} else {
-    $databasePort = (int) $databasePortValue;
-}
-
 if ($isDevelopment) {
     $host = $environmentValues["DB_HOST"] !== false && trim($environmentValues["DB_HOST"]) !== ""
         ? trim($environmentValues["DB_HOST"])
@@ -49,18 +36,90 @@ if ($isDevelopment) {
         ? $environmentValues["DB_PASSWORD"]
         : "";
 } else {
-    foreach ($environmentValues as $name => $value) {
+    $hasEnvironmentConfiguration = true;
+
+    foreach ($environmentValues as $value) {
         if ($value === false || trim($value) === "") {
-            http_response_code(500);
-            die("Database configuration is incomplete.");
+            $hasEnvironmentConfiguration = false;
+            break;
         }
     }
 
-    $host = trim($environmentValues["DB_HOST"]);
-    $dbname = trim($environmentValues["DB_NAME"]);
-    $username = trim($environmentValues["DB_USER"]);
-    $password = $environmentValues["DB_PASSWORD"];
+    if ($hasEnvironmentConfiguration) {
+        $host = trim($environmentValues["DB_HOST"]);
+        $dbname = trim($environmentValues["DB_NAME"]);
+        $username = trim($environmentValues["DB_USER"]);
+        $password = $environmentValues["DB_PASSWORD"];
+    } else {
+        $configPath = __DIR__ . '/../private_config/db_config.php';
+
+        if (!is_file($configPath) || !is_readable($configPath)) {
+            http_response_code(500);
+            die("Database configuration is incomplete.");
+        }
+
+        try {
+            $privateDatabaseConfig = require $configPath;
+        } catch (Throwable $e) {
+            http_response_code(500);
+            die("Database configuration is incomplete.");
+        }
+
+        if (
+            !is_array($privateDatabaseConfig) ||
+            !isset(
+                $privateDatabaseConfig["host"],
+                $privateDatabaseConfig["database"],
+                $privateDatabaseConfig["username"],
+                $privateDatabaseConfig["password"],
+                $privateDatabaseConfig["port"]
+            ) ||
+            !is_string($privateDatabaseConfig["host"]) ||
+            !is_string($privateDatabaseConfig["database"]) ||
+            !is_string($privateDatabaseConfig["username"]) ||
+            !is_string($privateDatabaseConfig["password"]) ||
+            (!is_string($privateDatabaseConfig["port"]) && !is_int($privateDatabaseConfig["port"]))
+        ) {
+            http_response_code(500);
+            die("Database configuration is incomplete.");
+        }
+
+        $host = trim($privateDatabaseConfig["host"]);
+        $dbname = trim($privateDatabaseConfig["database"]);
+        $username = trim($privateDatabaseConfig["username"]);
+        $password = $privateDatabaseConfig["password"];
+
+        if (
+            $host === "" ||
+            $dbname === "" ||
+            $username === "" ||
+            trim($password) === "" ||
+            $password === "REPLACE_WITH_INFINITYFREE_PASSWORD"
+        ) {
+            http_response_code(500);
+            die("Database configuration is incomplete.");
+        }
+
+        if ($databasePortValue === false) {
+            $databasePortValue = $privateDatabaseConfig["port"];
+        }
+    }
 }
+
+if ($databasePortValue === false) {
+    $databasePortValue = 3306;
+}
+
+if (
+    (!is_string($databasePortValue) && !is_int($databasePortValue)) ||
+    !preg_match('/^\d+$/D', (string) $databasePortValue) ||
+    (int) $databasePortValue < 1 ||
+    (int) $databasePortValue > 65535
+) {
+    http_response_code(500);
+    die("Database port configuration is invalid.");
+}
+$databasePort = (int) $databasePortValue;
 
 try {
     $pdo = new PDO(
