@@ -30,8 +30,12 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Achievements</title>
+    <script src="../js/script.js"></script>
+    <link rel="stylesheet" href="admin.css">
 </head>
-<body>
+<body class="admin-page">
+<?php require __DIR__ . '/sidebar.php'; ?>
+<main class="admin-main">
 
     <h1>Manage Achievements</h1>
 
@@ -60,6 +64,7 @@ try {
     <?php elseif (count($achievementRecords) > 0): ?>
 
         <?php foreach ($achievementRecords as $record): ?>
+            <article class="admin-record">
             <h3>
                 <?= htmlspecialchars($record['title'], ENT_QUOTES, 'UTF-8') ?>
             </h3>
@@ -89,8 +94,7 @@ try {
                 <input type="hidden" name="id" value="<?= (int) $record['id'] ?>">
                 <button type="submit">Delete</button>
             </form>
-
-            <hr>
+            </article>
         <?php endforeach; ?>
 
     <?php else: ?>
@@ -99,5 +103,6 @@ try {
 
     <?php endif; ?>
 
+</main>
 </body>
 </html>

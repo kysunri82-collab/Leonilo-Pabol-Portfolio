@@ -12,6 +12,14 @@
      6. Project filtering (Projects page)
    ========================================================= */
 
+// Apply a valid saved theme before the stylesheet can paint the page.
+(function applySavedThemeBeforePaint() {
+  const saved = getSavedTheme();
+  if (saved) {
+    document.documentElement.setAttribute("data-theme", saved);
+  }
+})();
+
 document.addEventListener("DOMContentLoaded", function () {
   initWebsiteSettings();
   initMobileNav();
@@ -22,11 +30,22 @@ document.addEventListener("DOMContentLoaded", function () {
   initProjectFilter();
 });
 
+function getSavedTheme() {
+  try {
+    const saved = window.localStorage.getItem("theme");
+    return saved === "dark" || saved === "light" ? saved : null;
+  } catch (error) {
+    return null;
+  }
+}
+
 /* ---------------------------------------------------------
    0. WEBSITE SETTINGS
    Apply the saved title, logo, and accent color across public pages.
 --------------------------------------------------------- */
 function initWebsiteSettings() {
+  if (!document.querySelector(".brand")) return;
+
   fetch("site_settings.php", { headers: { "Accept": "application/json" } })
     .then(function (response) {
       if (!response.ok) throw new Error("Settings are unavailable.");
@@ -112,7 +131,7 @@ function initThemeToggle() {
   const toggleBtn = document.querySelector(".theme-toggle");
   const root = document.documentElement;
 
-  const saved = localStorage.getItem("theme");
+  const saved = getSavedTheme();
   if (saved) {
     root.setAttribute("data-theme", saved);
   }
@@ -124,7 +143,11 @@ function initThemeToggle() {
     const current = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
     const next = current === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
+    try {
+      window.localStorage.setItem("theme", next);
+    } catch (error) {
+      // The current page still changes theme if browser storage is unavailable.
+    }
     updateThemeButtonLabel();
   });
 

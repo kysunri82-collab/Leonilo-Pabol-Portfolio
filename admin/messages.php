@@ -30,8 +30,12 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Messages</title>
+    <script src="../js/script.js"></script>
+    <link rel="stylesheet" href="admin.css">
 </head>
-<body>
+<body class="admin-page">
+<?php require __DIR__ . '/sidebar.php'; ?>
+<main class="admin-main">
 
     <h1>Manage Messages</h1>
 
@@ -52,6 +56,7 @@ try {
     <?php elseif (count($messages) > 0): ?>
 
         <?php foreach ($messages as $message): ?>
+            <article class="admin-record">
             <h3>
                 <?= htmlspecialchars($message['subject'], ENT_QUOTES, 'UTF-8') ?>
             </h3>
@@ -82,8 +87,7 @@ try {
                 <input type="hidden" name="id" value="<?= (int) $message['id'] ?>">
                 <button type="submit">Delete</button>
             </form>
-
-            <hr>
+            </article>
         <?php endforeach; ?>
 
     <?php else: ?>
@@ -92,5 +96,6 @@ try {
 
     <?php endif; ?>
 
+</main>
 </body>
 </html>

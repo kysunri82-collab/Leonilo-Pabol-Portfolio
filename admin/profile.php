@@ -155,8 +155,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
+    <script src="../js/script.js"></script>
+    <link rel="stylesheet" href="admin.css">
 </head>
-<body>
+<body class="admin-page">
+<?php require __DIR__ . '/sidebar.php'; ?>
+<main class="admin-main">
 
     <h1>Edit Profile</h1>
     <?php if (isset($_GET["updated"])): ?>
@@ -229,5 +233,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <br>
     <a href="dashboard.php">Back to Dashboard</a>
 
+</main>
 </body>
 </html>

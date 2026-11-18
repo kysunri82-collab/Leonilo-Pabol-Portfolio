@@ -94,8 +94,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Skill</title>
+    <script src="../js/script.js"></script>
+    <link rel="stylesheet" href="admin.css">
 </head>
-<body>
+<body class="admin-page">
+<?php require __DIR__ . '/sidebar.php'; ?>
+<main class="admin-main">
 
     <h1>Add New Skill</h1>
 
@@ -139,5 +143,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <br>
     <a href="skills.php">Back to Skills</a>
 
+</main>
 </body>
 </html>

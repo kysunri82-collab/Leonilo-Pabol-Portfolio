@@ -84,9 +84,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | Leonilo Pabol</title>
+    <script src="../js/script.js"></script>
+    <link rel="stylesheet" href="admin.css">
 </head>
-<body>
+<body class="admin-login-page">
+<main class="admin-login-card">
 
+    <button type="button" class="theme-toggle admin-login-theme-toggle" aria-label="Toggle dark mode">🌙 Dark</button>
     <h1>Administrator Login</h1>
     <p>Welcome back! Please log in to manage your portfolio.</p>
 
@@ -125,5 +129,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </p>
 <?php endif; ?>
 
+</main>
 </body>
 </html>

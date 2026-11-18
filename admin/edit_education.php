@@ -141,8 +141,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Education</title>
+    <script src="../js/script.js"></script>
+    <link rel="stylesheet" href="admin.css">
 </head>
-<body>
+<body class="admin-page">
+<?php require __DIR__ . '/sidebar.php'; ?>
+<main class="admin-main">
 
     <h1>Edit Education</h1>
 
@@ -194,5 +198,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <br>
     <a href="education.php">Back to Education</a>
 
+</main>
 </body>
 </html>

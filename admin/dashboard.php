@@ -62,8 +62,12 @@ $statLabels = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <script src="../js/script.js"></script>
+    <link rel="stylesheet" href="admin.css">
 </head>
-<body>
+<body class="admin-page">
+<?php require __DIR__ . '/sidebar.php'; ?>
+<main class="admin-main">
 
     <h1>Admin Dashboard</h1>
 
@@ -72,44 +76,6 @@ $statLabels = [
     </h2>
 
     <p>You are successfully logged in.</p>
-
-    <style>
-        .dashboard-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
-            margin: 24px 0;
-        }
-
-        .dashboard-stat {
-            padding: 16px;
-            border: 1px solid #d7e1ea;
-            border-radius: 8px;
-            background: #f7f9fb;
-        }
-
-        .dashboard-stat strong {
-            display: block;
-            font-size: 28px;
-            line-height: 1.2;
-        }
-
-        .dashboard-stat span {
-            display: block;
-            margin-top: 6px;
-        }
-
-        @media (max-width: 480px) {
-            .dashboard-stats {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 10px;
-            }
-
-            .dashboard-stat {
-                padding: 12px;
-            }
-        }
-    </style>
 
     <h2>Portfolio Statistics</h2>
 
@@ -126,30 +92,16 @@ $statLabels = [
         <?php endforeach; ?>
     </section>
 
-    <p>
-    <a href="profile.php">Manage My Profile</a>
-</p>
-<p>
-    <a href="settings.php">Website Settings</a>
-</p>
-<p>
-    <a href="projects.php">Manage My Projects</a>
-</p>
-<p>
-    <a href="skills.php">Manage My Skills</a>
-</p>
-<p>
-    <a href="education.php">Manage Education</a>
-</p>
-<p>
-    <a href="experience.php">Manage Experience</a>
-</p>
-<p>
-    <a href="achievements.php">Manage Achievements</a>
-</p>
-<p>
-    <a href="messages.php">Manage Messages</a>
-</p>
+    <nav class="dashboard-links" aria-label="Manage portfolio">
+        <a href="profile.php">Manage My Profile</a>
+        <a href="settings.php">Website Settings</a>
+        <a href="projects.php">Manage My Projects</a>
+        <a href="skills.php">Manage My Skills</a>
+        <a href="education.php">Manage Education</a>
+        <a href="experience.php">Manage Experience</a>
+        <a href="achievements.php">Manage Achievements</a>
+        <a href="messages.php">Manage Messages</a>
+    </nav>
 
     <form method="POST" action="logout.php">
         <input type="hidden" name="csrf_token"
@@ -157,5 +109,6 @@ $statLabels = [
         <button type="submit">Logout</button>
     </form>
 
+</main>
 </body>
 </html>

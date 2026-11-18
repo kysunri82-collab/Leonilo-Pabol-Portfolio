@@ -13,13 +13,17 @@ $projects = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Projects</title>
-    <?php if (isset($_GET["added"])): ?>
-    <p style="color: green;">Project added successfully!</p>
-<?php endif; ?>
+    <script src="../js/script.js"></script>
+    <link rel="stylesheet" href="admin.css">
 </head>
-<body>
+<body class="admin-page">
+<?php require __DIR__ . '/sidebar.php'; ?>
+<main class="admin-main">
 
     <h1>Manage Projects</h1>
+    <?php if (isset($_GET["added"])): ?>
+        <p style="color: green;">Project added successfully!</p>
+    <?php endif; ?>
     <?php if (isset($_GET["updated"])): ?>
     <p style="color: green;">Project updated successfully!</p>
 <?php endif; ?>
@@ -34,6 +38,7 @@ $projects = $stmt->fetchAll();
     <?php if (count($projects) > 0): ?>
 
         <?php foreach ($projects as $project): ?>
+            <article class="admin-record">
             <h3>
                 <?= htmlspecialchars($project['title'], ENT_QUOTES, 'UTF-8') ?>
             </h3>
@@ -61,8 +66,7 @@ $projects = $stmt->fetchAll();
     <button type="submit">Delete Project</button>
 
 </form>
-
-            <hr>
+            </article>
         <?php endforeach; ?>
 
     <?php else: ?>
@@ -71,5 +75,6 @@ $projects = $stmt->fetchAll();
 
     <?php endif; ?>
 
+</main>
 </body>
 </html>

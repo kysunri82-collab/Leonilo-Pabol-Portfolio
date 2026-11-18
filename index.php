@@ -13,6 +13,7 @@ $profile = $stmt->fetch();
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= htmlspecialchars($websiteSettings['website_title'] . ' | Home', ENT_QUOTES, 'UTF-8') ?></title>
+<script src="js/script.js"></script>
 <link rel="stylesheet" href="css/style.css">
 <style>:root { --accent: <?= htmlspecialchars($websiteSettings['appearance_color'], ENT_QUOTES, 'UTF-8') ?>; }</style>
 </head>
@@ -94,11 +95,9 @@ $profile = $stmt->fetch();
 <footer>
   <p>Thanks for stopping by.</p>
   <p>Leonilo Pabol's Portfolio • <span id="year"></span></p>
-  <a href="#top">BACK TO TOP ↑</a>
 </footer>
 
 <button id="scroll-top-btn" aria-label="Scroll to top">↑</button>
-<script src="js/script.js"></script>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

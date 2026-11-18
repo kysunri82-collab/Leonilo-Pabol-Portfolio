@@ -64,13 +64,8 @@ portfolio/
 ├── database/portfolio.sql  # Table definitions and limited sample data
 ├── .htaccess
 ├── .gitignore
-├── Dockerfile               # Not used by InfinityFree
-├── .dockerignore            # Not used by InfinityFree
-├── Caddyfile                # Not used by InfinityFree
 └── README.md
 ```
-
-The repository also has Docker/Caddy deployment files. They are not needed for InfinityFree, which runs the PHP site through its Apache hosting.
 
 ## Run locally with XAMPP
 
@@ -96,7 +91,7 @@ InfinityFree does not provide PHP environment variables in the same way as many 
 For deployment:
 
 1. Create a MySQL database in the InfinityFree control panel and import `database/portfolio.sql` through phpMyAdmin. Import any additional data export separately if you have one; the checked-in backup does not contain all live portfolio content.
-2. Extract the application files directly into the domain's `htdocs` directory, preserving their folders. Do not upload `.git`, `.env` files, SQL exports, or the Docker/Caddy deployment files.
+2. Extract the application files directly into the domain's `htdocs` directory, preserving their folders. Do not upload `.git`, `.env` files, SQL exports, or database backups.
 3. Create or upload `private_config/db_config.php` separately on the hosting account. Put the database values shown in the hosting panel there; do not add the file to GitHub or share its contents.
 4. Upload the required images under `uploads/` and keep `uploads/.htaccess` in place. The site uses HTTPS links for the live deployment.
 5. Test the public pages, `/admin/login.php`, image display, and contact form after deployment.

@@ -17,8 +17,12 @@ $skills = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Skills</title>
+    <script src="../js/script.js"></script>
+    <link rel="stylesheet" href="admin.css">
 </head>
-<body>
+<body class="admin-page">
+<?php require __DIR__ . '/sidebar.php'; ?>
+<main class="admin-main">
 
     <h1>Manage Skills</h1>
 
@@ -33,6 +37,7 @@ $skills = $stmt->fetchAll();
     <?php if (count($skills) > 0): ?>
 
         <?php foreach ($skills as $skill): ?>
+            <article class="admin-record">
             <h3>
                 <?= htmlspecialchars($skill['skill_name'], ENT_QUOTES, 'UTF-8') ?>
                 <small>(<?= htmlspecialchars($skill['category'] ?? '', ENT_QUOTES, 'UTF-8') ?>)</small>
@@ -58,8 +63,7 @@ $skills = $stmt->fetchAll();
                 <input type="hidden" name="id" value="<?= (int) $skill['id'] ?>">
                 <button type="submit">Delete</button>
             </form>
-
-            <hr>
+            </article>
         <?php endforeach; ?>
 
     <?php else: ?>
@@ -68,5 +72,6 @@ $skills = $stmt->fetchAll();
 
     <?php endif; ?>
 
+</main>
 </body>
 </html>
