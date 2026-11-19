@@ -78,7 +78,13 @@ portfolio/
 
 ### Database backup contents
 
-The checked-in SQL file creates the portfolio tables. Its included data rows are for Experience and Achievements; it does not create an administrator account or populate the other public-content tables. Add or restore your profile, projects, skills, education, and settings data before expecting those sections to show your full content.
+### Database backup contents
+
+The checked-in SQL file creates all 10 portfolio tables. It includes sample data for seven tables: Achievements, Education, Experience, Profile, Projects, Settings, and Skills.
+
+The `admins`, `login_attempts`, and `contact_messages` tables are created without inserted data. The SQL backup does not include an administrator account or existing contact messages.
+
+Create the first administrator account separately using PHP's `password_hash()` function. Restore or add any additional portfolio content as needed.
 
 ## Admin access
 
